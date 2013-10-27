@@ -9,9 +9,21 @@
 .room .message-creator {
   position: absolute;
   bottom: 0px;
+  margin-bottom: 15px;
 }
 
 .room .timeline {
   overflow-y: scroll;
   height: 500px;
+}
+
+.message {
+  width: 655px;
+  height: 50px;
+  line-height: 30px;
+  padding: 15px;
+}
+
+.btn-send {
+  height: 50px;
 }
