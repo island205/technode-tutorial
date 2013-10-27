@@ -1,0 +1,18 @@
+{
+  "name": "nodechat",
+  "version": "0.0.0",
+  "authors": [
+    "island205 <island205@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.0.0"
+  }
+}

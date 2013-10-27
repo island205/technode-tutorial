@@ -1,0 +1,17 @@
+.log-in-modal .modal-dialog {
+  width: 420px;
+}
+.room {
+  height: 600px;
+  position: relative;
+}
+
+.room .message-creator {
+  position: absolute;
+  bottom: 0px;
+}
+
+.room .timeline {
+  overflow-y: scroll;
+  height: 500px;
+}
