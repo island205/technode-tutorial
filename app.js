@@ -1,15 +1,20 @@
+//http://www.readability.com/articles/ye13gync
+
 var express = require('express')
+var gravatar = require('gravatar')
 var app = express();
 var port = process.env.PORT || 3000
 
 var rooms = {
   'javascript': {
     name: 'javascript',
-    users: []
+    users: [],
+    messages:[]
   },
   'node.js': {
     name: 'node.js',
-    users: []
+    users: [],
+    messages:[]
   }
 }
 
@@ -19,18 +24,23 @@ var io = require('socket.io').listen(app.listen(port))
 
 io.sockets.on('connection', function (socket) {
   socket.on('read:rooms', function () {
-    socket.emit('read:rooms', Object.keys(rooms).map(function (roomName) {
-      return {name: roomName}
-    }))
+    socket.emit('read:rooms', rooms)
   })
 
   socket.on('add:user', function (user) {
-    rooms[user.room].users.push({
-      email: user.email,
-      socket:socket
-    })
-    socket.broadcast.emit('add:user', user)
+    user.avatar = gravatar.url(user.email)
+    user.name = user.email.split('@').shift()
+    rooms[user.room].users.push(user)
+    io.sockets.emit('add:user', user)
+  })
+  socket.on('add:message', function (message) {
+    rooms[message.user.room].messages.push(message)
+    io.sockets.emit('add:message', message)
   })
 })
 
 console.log("nodechat  is on port " + port + '!')
+
+function generateUser(user) {
+
+}
