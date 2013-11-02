@@ -19,14 +19,6 @@
       <div class="row">
         <div class="col-md-4">
           <div class="list-group room-list">
-            <!--
-            <a href="#" class="list-group-item active">
-              Teambition
-            </a>
-            <a href="#" class="list-group-item">NodeChat</a>
-            <a href="#" class="list-group-item">JavaScript</a>
-            <a href="#" class="list-group-item">Java</a>
-            -->
           </div>
         </div>
         <div class="col-md-8">
@@ -35,44 +27,6 @@
             <div class="panel-body">
               <div class="timeline">
                 <div class="list-group">
-                  <!--
-                  <a href="#" class="list-group-item active">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>
-                  <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>
-                  <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>
-                  <a href="#" class="list-group-item active">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>
-                  <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>
-                  <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>
-                  <a href="#" class="list-group-item active">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>
-                  <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>
-                  <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>
-                  -->
                 </div>
               </div>
               <form class="form-inline message-creator">
@@ -119,6 +73,20 @@
       </div>
     </div>
 
+    <script type="text/tmpl" id="list-room-item">
+      {{#rooms}}
+        <div class="list-group-item room-{{name}}">
+          <h4>{{name}}<span class="badge pull-right">{{users.length}}</span></h4>
+          <div class="avatar-list">
+            {{#users}}
+              <img alt="..." src="{{avatar}}" class="img-rounded" />
+            {{/users}}
+          </div>
+        </div>
+      {{/rooms}}
+    </script>
+
+    <script src="/components/mustache/mustache.js"></script>
     <script src="/components/jquery/jquery.min.js"></script>
     <script src="/components/jquery-tmpl/jquery.tmpl.min.js"></script>
     <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>

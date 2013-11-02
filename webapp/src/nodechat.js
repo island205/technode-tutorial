@@ -1,15 +1,8 @@
 $(function () {
-  $('.log-in-modal').modal()
+  // $('.log-in-modal').modal()
   var socket = io.connect('http://localhost:3000')
   var rooms = {}
   var user = {}
-  function renderRoom(room) {
-    $('.room-' + room.name).html(room.name + '(' + room.users.length + ')')
-  }
-  $timeline = $('.timeline')
-  function updateTimeline(message) {
-    $.tmpl('<div class="list-group-item"><span>${user.name}:</span>${message}</div>', message).appendTo($timeline)
-  }
   $message = $('.message')
   $('.btn-send').on('click', function (evt) {
     evt.preventDefault()
@@ -29,7 +22,7 @@ $(function () {
     var $dropdownRoomsLabel = $('.dropdown-rooms-label').html(roomsData[0].name)
 
     // render rooms
-    $.tmpl('<div class="list-group-item room-${name}">${name}(${users.length})</div>', roomsData)
+    tmpl('#list-room-item', {rooms:roomsData})
       .appendTo($('.room-list'))
     $('.room-list a').first().addClass('active')
     $('.room-header').html(roomsData[0].name)
@@ -58,7 +51,7 @@ $(function () {
   socket.on('add:user', function (data) {
     user = data
     rooms[user.room].users.push(user)
-    renderRoom(rooms[user.room])
+    addUser(user)
   })
 
   socket.on('add:message', function (data) {
@@ -67,4 +60,17 @@ $(function () {
   })
 
   socket.emit('read:rooms')
+
+  function addUser(user) {
+    var $room = $('.room-' + user.room)
+    $room.find('h4 span').html(rooms[user.room].users.length)
+    $.tmpl('<img alt="..." src="${avatar}" class="img-rounded" />', user).appendTo($room.find('.avatar-list'))
+  }
+  $timeline = $('.timeline')
+  function updateTimeline(message) {
+    $.tmpl('<div class="list-group-item"><img alt="..." src="${user.avatar}" class="img-rounded" />:${message}</div>', message).appendTo($timeline)
+  }
+  function tmpl(id, data) {
+    return $(Mustache.render($(id).html(), data))
+  }
 })
