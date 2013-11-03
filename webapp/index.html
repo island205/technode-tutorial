@@ -27,11 +27,21 @@
             <div class="panel-body">
               <div class="timeline">
                 <div class="list-group">
+                  <!--<div class="list-group-item message">
+                    <img alt="..." src="https://pbs.twimg.com/profile_images/2276387087/yubzyux1vmt34xucuemp_normal.jpeg" class="">
+                    <div class="trangle"></div>
+                    <p class="message-body">Consistent, sub 1000ms page loads on mobile? Yep, it's doable.</p>
+                  </div>
+                  <div class="list-group-item message me">
+                    <img alt="..." src="https://pbs.twimg.com/profile_images/2276387087/yubzyux1vmt34xucuemp_normal.jpeg" class="">
+                    <div class="trangle"></div>
+                    <p class="message-body">Consistent, sub 1000ms page loads on mobile? Yep, it's doable.</p>
+                  </div>-->
                 </div>
               </div>
               <form class="form-inline message-creator">
                 <div class="form-group">
-                  <input type="text" class="form-control message" placeholder="say something">
+                  <input type="text" class="form-control message-input" placeholder="say something">
                 </div>
                 <button type="submit" class="btn btn-success btn-send">send</button>
               </form>
@@ -55,12 +65,6 @@
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-rooms" role="menu">
-                  <!--
-                  <li><a href="#">NodeChat</a></li>
-                  <li><a href="#">JavaScript</a></li>
-                  <li><a href="#">Java</a></li>
-                  <li><a href="#">Node.js</a></li>
-                  -->
                 </ul>
               </div>
               <div class="form-group">
@@ -75,15 +79,24 @@
 
     <script type="text/tmpl" id="list-room-item">
       {{#rooms}}
-        <div class="list-group-item room-{{name}}">
+        <div class="list-group-item room-{{name}} room-item" data-name="{{name}}">
           <h4>{{name}}<span class="badge pull-right">{{users.length}}</span></h4>
           <div class="avatar-list">
             {{#users}}
-              <img alt="..." src="{{avatar}}" class="img-rounded" />
+              <img alt="{{email}}" src="{{avatar}}" class="img-rounded user-{{id}}"/>
             {{/users}}
           </div>
         </div>
       {{/rooms}}
+    </script>
+    <script type="text/tmpl" id="list-message-item">
+      {{#messages}}
+        <div class="list-group-item message {{#isMe}}me{{/isMe}}">
+          <img alt="..." src="{{user.avatar}}" class="">
+          <div class="trangle"></div>
+          <p class="message-body">{{message}}</p>
+        </div>
+      {{/messages}}
     </script>
 
     <script src="/components/mustache/mustache.js"></script>

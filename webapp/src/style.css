@@ -17,7 +17,7 @@
   height: 500px;
 }
 
-.message {
+.message-input {
   width: 655px;
   height: 50px;
   line-height: 30px;
@@ -30,4 +30,73 @@
 
 .avatar-list img {
   height: 25px;
+}
+
+.room-item.in {
+  background-color: #f5f5f5;
+}
+
+.room-header {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.message {
+  border: none;
+  position: relative;
+  background-color: transparent;
+  margin-bottom: 10px;
+}
+.message img {
+  height: 40px;
+  background-color: white;
+}
+.message .trangle {
+  border-top: 15px solid white;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: none;
+  height: 0;
+  width: 0;
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+  position: absolute;
+  top: 7px;
+  left: 40px;
+}
+
+.timeline .list-group {
+  height: 90%;
+  background-color: #f3f3f3;
+  overflow-y:scroll;
+}
+.message .message-body {
+  position: absolute;
+  left: 52px;
+  top: 8px;
+  background-color: white;
+  min-height: 60px;
+  padding: 5px;
+  width: 50%;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+.message.me img {
+  position: absolute;
+  right: 0;
+}
+.message.me .trangle {
+  position: absolute;
+  right: 25px;
+  left: auto;
+  -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
+}
+.message.me .message-body {
+  left: auto;
+  right: 37px;
+  border-bottom: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: none;
 }
