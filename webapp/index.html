@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="nodechatApp">
   <head>
     <title>NodeChat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/src/style.css" rel="stylesheet" media="screen">
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/components/angular/angular.js"></script>
+    <script type="text/javascript" src="/src/index.js"></script>
   </head>
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -17,26 +20,26 @@
 
     <div class="container" style="margin-top:100px;">
       <div class="row">
+
         <div class="col-md-4">
-          <div class="list-group room-list">
+          <div class="list-group room-list" ng-controller="RoomListCtrl">
+            <div class="list-group-item room-item" ng-repeat="room in rooms">
+              <h4>{{room.name}}<span class="badge pull-right">{{room.users.length}}</span></h4>
+              <div class="avatar-list">
+                  <span ng-repeat="user in room.users">
+                    <img alt="{{user.email}}" src="{{user.avatar}}" class="img-rounded"/>
+                  </span>
+              </div>
+            </div>
           </div>
         </div>
+
         <div class="col-md-8">
           <div class="panel panel-default room">
             <div class="panel-heading room-header">Teambition</div>
             <div class="panel-body">
               <div class="timeline">
                 <div class="list-group">
-                  <!--<div class="list-group-item message">
-                    <img alt="..." src="https://pbs.twimg.com/profile_images/2276387087/yubzyux1vmt34xucuemp_normal.jpeg" class="">
-                    <div class="trangle"></div>
-                    <p class="message-body">Consistent, sub 1000ms page loads on mobile? Yep, it's doable.</p>
-                  </div>
-                  <div class="list-group-item message me">
-                    <img alt="..." src="https://pbs.twimg.com/profile_images/2276387087/yubzyux1vmt34xucuemp_normal.jpeg" class="">
-                    <div class="trangle"></div>
-                    <p class="message-body">Consistent, sub 1000ms page loads on mobile? Yep, it's doable.</p>
-                  </div>-->
                 </div>
               </div>
               <form class="form-inline message-creator">
@@ -48,62 +51,8 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
-
-    <div class="modal fade log-in-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Welcome to NodeChat</h4>
-          </div>
-          <div class="modal-body">
-            <form class="form-inline">
-              <div class="btn-group">
-                <button type="button" class="btn btn-success dropdown-rooms-label">NodeChat</button>
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu dropdown-rooms" role="menu">
-                </ul>
-              </div>
-              <div class="form-group">
-                <input type="email" class="form-control user-email" id="gmail" placeholder="example@gmail.com">
-              </div>
-              <button type="submit" class="btn btn-primary btn-enter">Enter</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script type="text/tmpl" id="list-room-item">
-      {{#rooms}}
-        <div class="list-group-item room-{{name}} room-item" data-name="{{name}}">
-          <h4>{{name}}<span class="badge pull-right">{{users.length}}</span></h4>
-          <div class="avatar-list">
-            {{#users}}
-              <img alt="{{email}}" src="{{avatar}}" class="img-rounded user-{{id}}"/>
-            {{/users}}
-          </div>
-        </div>
-      {{/rooms}}
-    </script>
-    <script type="text/tmpl" id="list-message-item">
-      {{#messages}}
-        <div class="list-group-item message {{#isMe}}me{{/isMe}}">
-          <img alt="..." src="{{user.avatar}}" class="">
-          <div class="trangle"></div>
-          <p class="message-body">{{message}}</p>
-        </div>
-      {{/messages}}
-    </script>
-
-    <script src="/components/mustache/mustache.js"></script>
-    <script src="/components/jquery/jquery.min.js"></script>
-    <script src="/components/jquery-tmpl/jquery.tmpl.min.js"></script>
-    <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/src/nodechat.js"></script>
   </body>
 </html>
