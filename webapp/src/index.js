@@ -25,9 +25,10 @@ nodechatApp.factory('socket', function($rootScope) {
 })
 
 nodechatApp.controller("RoomListCtrl", function RoomListCtrl($scope, socket) {
-  $scope = {
-    rooms:[]
-  }
+  $scope.rooms = [{
+    name: 'nodejs',
+    users: []
+  }]
   socket.on('read:rooms', function (rooms) {
     $scope.rooms = rooms
   })
