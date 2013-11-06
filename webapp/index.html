@@ -6,6 +6,10 @@
     <link href="/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/src/style.css" rel="stylesheet" media="screen">
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/components/mustache/mustache.js"></script>
+    <script src="/components/jquery/jquery.min.js"></script>
+    <script src="/components/jquery-tmpl/jquery.tmpl.min.js"></script>
+    <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/components/angular/angular.js"></script>
     <script type="text/javascript" src="/src/index.js"></script>
   </head>
@@ -52,7 +56,36 @@
           </div>
         </div>
 
+
       </div>
     </div>
+
+    <div class="modal fade log-in-modal" ng-controller="LoginCtrl">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Welcome to NodeChat</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-inline">
+              <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-rooms-label">{{selectRoom.item.name}}</button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-rooms" role="menu">
+                  <li  ng-repeat="room in rooms"><a href="#" ng-click="selectRoom.item = room">{{room.name}}</a></li>
+                </ul>
+              </div>
+              <div class="form-group">
+                <input type="email" requires class="form-control user-email" id="gmail" placeholder="example@gmail.com">
+              </div>
+              <button type="submit" class="btn btn-primary btn-enter" ng-click="login()">Enter</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>

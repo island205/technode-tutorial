@@ -25,12 +25,21 @@ nodechatApp.factory('socket', function($rootScope) {
 })
 
 nodechatApp.controller("RoomListCtrl", function RoomListCtrl($scope, socket) {
-  $scope.rooms = [{
-    name: 'nodejs',
-    users: []
-  }]
-  socket.on('read:rooms', function (rooms) {
+  socket.on('read:rooms', function(rooms) {
     $scope.rooms = rooms
   })
   socket.emit('read:rooms')
+})
+nodechatApp.controller("LoginCtrl", function LoginCtrl($scope, socket) {
+  socket.on('read:rooms', function(rooms) {
+    $scope.rooms = rooms
+    $scope.selectRoom = {
+      item: $scope.rooms[0]
+    }
+    $('.log-in-modal').modal()
+  })
+  socket.emit('read:rooms')
+  $scope.login = function () {
+    alert('login')
+  }
 })
