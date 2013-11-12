@@ -1,4 +1,4 @@
-var nodechatApp = angular.module('nodechatApp', [])
+var nodechatApp = angular.module('nodechatApp', ['ngRoute'])
 
 nodechatApp.factory('socket', function($rootScope) {
   var socket = io.connect('http://localhost:3000')
@@ -24,22 +24,23 @@ nodechatApp.factory('socket', function($rootScope) {
   }
 })
 
-nodechatApp.controller("RoomListCtrl", function RoomListCtrl($scope, socket) {
-  socket.on('read:rooms', function(rooms) {
-    $scope.rooms = rooms
-  })
-  socket.emit('read:rooms')
+nodechatApp.config(['$routeProvider'], function ($routeProvider) {
+  $routeProvider.
+    when('/login', {
+      templateUrl:'/src/partials/login.html',
+      controller: 'LoginCtrl'
+    }).
+    when('/', {
+      templateUrl: '/src/partials/nodechat.html',
+      controller: 'NodeChatCtrl'
+    }).
+    otherwise({
+      redirectTo:'/login'
+    })
 })
-nodechatApp.controller("LoginCtrl", function LoginCtrl($scope, socket) {
-  socket.on('read:rooms', function(rooms) {
+
+nodechatApp.controller('LoginCtrl', function ($scope, socket) {
+  socket.on('read:rooms', function (rooms) {
     $scope.rooms = rooms
-    $scope.selectRoom = {
-      item: $scope.rooms[0]
-    }
-    $('.log-in-modal').modal()
   })
-  socket.emit('read:rooms')
-  $scope.login = function () {
-    alert('login')
-  }
 })

@@ -1,0 +1,30 @@
+<div class="col-md-4">
+  <div class="list-group room-list" ng-controller="RoomListCtrl">
+    <div class="list-group-item room-item" ng-repeat="room in rooms">
+      <h4>{{room.name}}<span class="badge pull-right">{{room.users.length}}</span></h4>
+      <div class="avatar-list">
+          <span ng-repeat="user in room.users">
+            <img alt="{{user.email}}" src="{{user.avatar}}" class="img-rounded"/>
+          </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-8">
+  <div class="panel panel-default room">
+    <div class="panel-heading room-header">Teambition</div>
+    <div class="panel-body">
+      <div class="timeline">
+        <div class="list-group">
+        </div>
+      </div>
+      <form class="form-inline message-creator">
+        <div class="form-group">
+          <input type="text" class="form-control message-input" placeholder="say something">
+        </div>
+        <button type="submit" class="btn btn-success btn-send">send</button>
+      </form>
+    </div>
+  </div>
+</div>
