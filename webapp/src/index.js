@@ -24,7 +24,8 @@ nodechatApp.factory('socket', function($rootScope) {
   }
 })
 
-nodechatApp.config(['$routeProvider'], function ($routeProvider) {
+nodechatApp.config(function ($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode(true);
   $routeProvider.
     when('/login', {
       templateUrl:'/src/partials/login.html',
@@ -40,7 +41,6 @@ nodechatApp.config(['$routeProvider'], function ($routeProvider) {
 })
 
 nodechatApp.controller('LoginCtrl', function ($scope, socket) {
-  socket.on('read:rooms', function (rooms) {
-    $scope.rooms = rooms
-  })
+})
+nodechatApp.controller('NodeChatCtrl', function ($scope, socket) {
 })
