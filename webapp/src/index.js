@@ -40,7 +40,20 @@ nodechatApp.config(function ($routeProvider, $locationProvider) {
     })
 })
 
-nodechatApp.controller('LoginCtrl', function ($scope, socket) {
+nodechatApp.controller('MainCtrl', function ($scope, socket) {
+  $scope.onSelectRoom = function (room) {
+    $scope.selectedRoom = room
+  }
+  socket.on('read:rooms', function (rooms) {
+    $scope.rooms = rooms
+    $scope.selectedRoom = rooms[0]
+  })
+  socket.emit('read:rooms')
 })
-nodechatApp.controller('NodeChatCtrl', function ($scope, socket) {
+nodechatApp.controller('LoginCtrl', function ($scope, $location, socket) {
+  $scope.login = function () {
+    $location.path('/')
+  }
+})
+nodechatApp.controller('NodeChatCtrl', function ($scope) {
 })
