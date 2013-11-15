@@ -16,6 +16,8 @@ app.use(function (req, res) {
 
 var io = require('socket.io').listen(app.listen(port))
 
-io.sockets.on('connection', require('./socket'))
+io.sockets.on('connection', function (socket) {
+	require('./socket')(socket, io)
+})
 
 console.log("nodechat  is on port " + port + '!')
