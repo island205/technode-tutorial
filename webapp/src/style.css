@@ -47,6 +47,10 @@
   background-color: transparent;
   margin-bottom: 10px;
 }
+.navbar-nav img {
+	width: 30px;
+	margin-top: 10px;
+}
 .message img {
   height: 40px;
   background-color: white;

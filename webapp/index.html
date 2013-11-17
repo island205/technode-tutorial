@@ -1,4 +1,4 @@
-OCTYPE html>
+<OCTYPE html>
 <html ng-app="nodechatApp">
   <head>
     <title>NodeChat</title>
@@ -10,17 +10,25 @@ OCTYPE html>
     <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/components/angular/angular.js"></script>
     <script type="text/javascript" src="/components/angular-route/angular-route.js"></script>
+		<script type="text/javascript" src="/components/angular-cookies/angular-cookies.js"></script>
     <script type="text/javascript" src="/src/index.js"></script>
   </head>
-  <body>
+  <body  ng-controller="MainCtrl">
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">NodeChat</a>
         </div>
+				<nav class="collapse navbar-collapse" role="navigation">
+				  <ul class="nav navbar-nav navbar-right">
+				    <li>
+							<img alt="{{userMe.name}}" src="{{userMe.avatar}}" class="img-rounded"/>
+				    </li>
+				  </ul>
+				</nav>
       </div>
     </div>
-    <div class="container" style="margin-top:100px;" ng-controller="MainCtrl">
+    <div class="container" style="margin-top:100px;">
        <div class="row" ng-view>
       </div>
     </div>

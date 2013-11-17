@@ -10,7 +10,7 @@ var Message = new Schema({
     avatar: String
   },
   create_at:{type: Date, default: Date.now},
-  roomId: ObjectId
+  _roomId: ObjectId
 })
 
 module.exports = Message

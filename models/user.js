@@ -6,7 +6,8 @@ var User = new Schema({
   email: String,
   name: String,
   avatar: String,
-  _roomId: ObjectId
+  _roomId: ObjectId,
+	online: Boolean
 });
 
 module.exports = User

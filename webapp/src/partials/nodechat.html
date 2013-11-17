@@ -1,9 +1,9 @@
 <div class="col-md-4">
   <div class="list-group room-list" ng-controller="NodeChatCtrl">
-    <div class="list-group-item room-item" ng-repeat="room in rooms">
+    <div class="list-group-item room-item {{(room.name == selectedRoom.name ? 'selected' : '')}}" ng-repeat="room in rooms">
       <h4>{{room.name}}<span class="badge pull-right">{{room.users.length}}</span></h4>
       <div class="avatar-list">
-          <span ng-repeat="user in room.users">
+          <span ng-repeat="user in room.users" title="{{user.name}}">
             <img alt="{{user.email}}" src="{{user.avatar}}" class="img-rounded"/>
           </span>
       </div>
@@ -13,15 +13,20 @@
 
 <div class="col-md-8">
   <div class="panel panel-default room">
-    <div class="panel-heading room-header">Teambition</div>
+    <div class="panel-heading room-header">{{selectedRoom.name}}</div>
     <div class="panel-body">
       <div class="timeline">
-        <div class="list-group">
+        <div class="list-group" auto-scroll-to-bottom>
+          <div class="list-group-item message" ng-repeat="message in selectedRoom.messages">
+            <img alt="{{message.creator.name}}"src="{{message.creator.avatar}}" class="">
+            <div class="trangle"></div>
+            <p class="message-body">{{message.content}}</p>
+          </div>
         </div>
       </div>
-      <form class="form-inline message-creator">
+      <form class="form-inline message-creator" ng-submit="sendMessage()">
         <div class="form-group">
-          <input type="text" class="form-control message-input" placeholder="say something">
+          <input type="text" required class="form-control message-input" ng-model="message"  placeholder="say something">
         </div>
         <button type="submit" class="btn btn-success btn-send">send</button>
       </form>
