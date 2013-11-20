@@ -17,7 +17,7 @@
     <div class="panel-body">
       <div class="timeline">
         <div class="list-group" auto-scroll-to-bottom>
-          <div class="list-group-item message" ng-repeat="message in selectedRoom.messages">
+          <div class="list-group-item message {{message.creator.name == userMe.name ? '': ''}}" ng-repeat="message in selectedRoom.messages">
             <img alt="{{message.creator.name}}"src="{{message.creator.avatar}}" class="">
             <div class="trangle"></div>
             <p class="message-body">{{message.content}}</p>

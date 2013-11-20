@@ -6,15 +6,9 @@
   position: relative;
 }
 
-.room .message-creator {
-  position: absolute;
-  bottom: 0px;
-  margin-bottom: 15px;
-}
-
 .room .timeline {
   overflow-y: scroll;
-  height: 500px;
+  height: 470px;
 }
 
 .message-input {
@@ -52,38 +46,47 @@
 	margin-top: 10px;
 }
 .message img {
-  height: 40px;
+  height: 30px;
   background-color: white;
+  float: left;
 }
 .message .trangle {
-  border-top: 15px solid white;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
+  border-top: 10px solid white;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
   border-bottom: none;
   height: 0;
   width: 0;
-  -webkit-transform: rotate(-135deg);
-  transform: rotate(-135deg);
   position: absolute;
-  top: 7px;
-  left: 40px;
+  top: 20px;
+  left: 45px;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 .timeline .list-group {
-  height: 90%;
   background-color: #f3f3f3;
   overflow-y:scroll;
+  height: 96%;
+  padding: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
 }
 .message .message-body {
-  position: absolute;
+  display: inline-block;
+  max-width: 60%;
   left: 52px;
   top: 8px;
   background-color: white;
-  min-height: 60px;
-  padding: 5px;
-  width: 50%;
+  padding: 10px;
+  margin-left: 15px;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 5px 10px #ccc;
+  box-shadow: 0px 5px 10px #ccc;
 }
 
 .message.me img {
