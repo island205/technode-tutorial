@@ -91,19 +91,17 @@
 
 .message.me img {
   position: absolute;
-  right: 0;
+  right: 15px;
 }
 .message.me .trangle {
   position: absolute;
-  right: 25px;
+  right: 45px;
   left: auto;
-  -webkit-transform: rotate(135deg);
-  transform: rotate(135deg);
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  z-index: 100;
 }
 .message.me .message-body {
-  left: auto;
-  right: 37px;
-  border-bottom: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  border-right: none;
+  float: right;
+  margin-right: 43px;
 }
