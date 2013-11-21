@@ -16,7 +16,20 @@ nodechatApp.directive('autoScrollToBottom', function() {
     }
   };
 });
-
+nodechatApp.directive('emojify', function() {
+  return {
+    link: function (scope, element, attrs) {
+      scope.$watch(
+        function() {
+          return element.html()
+        },
+        function() {
+          emojify.run(element.get(0))
+        }
+      );
+    }
+  };
+});
 nodechatApp.factory('socket', function($rootScope) {
   var socket = io.connect('/')
   return {

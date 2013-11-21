@@ -20,7 +20,7 @@
           <div class="list-group-item message clearfix {{message.creator.name == userMe.name ? 'me': ''}}" ng-repeat="message in selectedRoom.messages">
             <img alt="{{message.creator.name}}"src="{{message.creator.avatar}}" class="">
             <div class="trangle"></div>
-            <p class="message-body">{{message.content}}</p>
+            <p class="message-body" emojify>{{message.content}}</p>
           </div>
         </div>
       </div>
