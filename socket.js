@@ -29,8 +29,8 @@ module.exports = function (socket, io) {
               })
             },
             function (done) {
-              db.Message.find({_roomId: roomData._id}, function (err, messages) {
-                done(err, messages)
+              db.Message.find({_roomId: roomData._id}, null, {sort: {'create_at': -1}, limit: 20}, function (err, messages) {
+                done(err, messages.reverse())
               })
             }
           ],

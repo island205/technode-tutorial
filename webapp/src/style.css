@@ -7,7 +7,6 @@
 }
 
 .room .timeline {
-  overflow-y: scroll;
   height: 470px;
 }
 

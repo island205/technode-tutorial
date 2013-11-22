@@ -66,7 +66,7 @@ nodechatApp.config(function($routeProvider, $locationProvider) {
     controller: 'NodeChatCtrl'
   }).
   otherwise({
-    redirectTo: '/login'
+    redirectTo: '/'
   })
 })
 
@@ -74,10 +74,26 @@ nodechatApp.controller('MainCtrl', function($scope, $location, $cookies, socket)
   socket.on('read:rooms', function(rooms) {
     $scope.rooms = rooms
     $scope.selectedRoom = rooms[0]
+    if ($cookies.email) {
+      rooms.forEach(function(room) {
+        if (room._id == $cookies['selectedRoomId']) {
+          selectedRoom = room
+        }
+      })
+      socket.emit('login', {
+        email: $cookies.email,
+        selectedRoom: selectedRoom
+      })
+      $location.path('/')
+    } else {
+      $location.path('/login')
+    }
   })
   socket.on('login', function(user) {
     $scope.userMe = user
     $location.path('/')
+    $cookies.email = user.email
+    $cookies.selectedRoomId = $scope.selectedRoom._id
   })
   $scope.$on('change:selectedRoom', function(evt, room) {
     $scope.selectedRoom = room
@@ -127,9 +143,6 @@ nodechatApp.controller('LoginCtrl', function($scope, $cookies, socket) {
   }
 })
 nodechatApp.controller('NodeChatCtrl', function($scope, $location, $cookies, socket) {
-  if (!$scope.userMe) {
-    $location.path('/login')
-  }
   $scope.sendMessage = function() {
     socket.emit('add:message', {
       content: $scope.message,

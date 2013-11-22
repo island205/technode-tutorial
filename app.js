@@ -8,9 +8,11 @@ var fs = require('fs')
 
 app.use(express.static(__dirname + '/webapp'))
 
+var indexPage = fs.readFileSync('./webapp/index.html')
+
 app.use(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/html'})
-  res.write(fs.readFileSync('./webapp/index.html'))
+  res.write(indexPage)
   res.end()
 })
 
