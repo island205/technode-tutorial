@@ -30,6 +30,21 @@ nodechatApp.directive('emojify', function() {
     }
   };
 });
+nodechatApp.directive('markdown', function() {
+  var converter = new Showdown.converter();
+  return {
+    link: function (scope, element, attrs) {
+      scope.$watch(
+        function() {
+          return element.html()
+        },
+        function() {
+          element.html(converter.makeHtml(element.html()))
+        }
+      );
+    }
+  };
+});
 nodechatApp.factory('socket', function($rootScope) {
   var socket = io.connect('/')
   return {
@@ -70,7 +85,7 @@ nodechatApp.config(function($routeProvider, $locationProvider) {
   })
 })
 
-nodechatApp.controller('MainCtrl', function($scope, $location, $cookies, socket) {
+nodechatApp.controller('MainCtrl', function($scope, $location, $cookies, $cookieStore, socket) {
   socket.on('read:rooms', function(rooms) {
     $scope.rooms = rooms
     $scope.selectedRoom = rooms[0]
@@ -95,6 +110,11 @@ nodechatApp.controller('MainCtrl', function($scope, $location, $cookies, socket)
     $cookies.email = user.email
     $cookies.selectedRoomId = $scope.selectedRoom._id
   })
+  $scope.logout = function () {
+    $cookieStore.remove('email')
+    $cookieStore.remove('selectedRoomId')
+    window.location.reload()
+  }
   $scope.$on('change:selectedRoom', function(evt, room) {
     $scope.selectedRoom = room
   })
@@ -128,6 +148,18 @@ nodechatApp.controller('MainCtrl', function($scope, $location, $cookies, socket)
       }
     })
   })
+  socket.on('change:room', function (change) {
+    $scope.rooms.forEach(function (room) {
+      if (room._id == change.from._id) {
+        room.users = room.users.filter(function (user) {
+          return user._id != change.user._id
+        })
+      }
+      if (room._id == change.to._id) {
+        room.users.push(change.user)
+      }
+    })
+  })
   socket.emit('read:rooms')
 })
 nodechatApp.controller('LoginCtrl', function($scope, $cookies, socket) {
@@ -151,4 +183,27 @@ nodechatApp.controller('NodeChatCtrl', function($scope, $location, $cookies, soc
     })
     $scope.message = ""
   }
+  $scope.changeSelectedRoom = function (room) {
+    socket.emit('change:room', {
+      from: $scope.selectedRoom,
+      to: room,
+      user: $scope.userMe
+    })
+    $scope.$emit('change:selectedRoom', room)
+  }
+})
+nodechatApp.controller('RoomCreatorCtrl', function($scope, socket) {
+  $scope.isShow = false
+  $scope.toggleCreator = function () {
+    $scope.isShow = !$scope.isShow
+  }
+  $scope.createRoom = function () {
+    socket.emit('create:room', {
+      roomName: $scope.roomName
+    })
+  }
+  socket.on('add:room', function (room) {
+    $scope.rooms.push(room)
+    $scope.isShow = false
+  })
 })

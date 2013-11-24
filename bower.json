@@ -15,6 +15,7 @@
   "dependencies": {
     "bootstrap": "~3.0.0",
     "jquery-tmpl": "*",
-    "mustache": "~0.7.2"
+    "mustache": "~0.7.2",
+    "showdown": "~0.3.1"
   }
 }
