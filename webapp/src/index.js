@@ -1,8 +1,31 @@
-var nodechatApp = angular.module('nodechatApp', ['ngRoute', 'ngCookies'])
+var techNodeApp = angular.module('techNodeApp', ['ngRoute', 'ngCookies'])
+techNodeApp.directive('ctrlEnterBreakLine', function() {
+  return function(scope, element, attrs) {
+    var ctrlDown = false
+    element.bind("keydown", function(evt) {
+      if (evt.which === 17) {
+        ctrlDown = true
+        setTimeout(function() {
+          ctrlDown = false
+        }, 1000)
+      }
+      if (evt.which === 13) {
+        if (ctrlDown) {
+          element.val(element.val() + '\n')
+        } else {
+          scope.$apply(function() {
+            scope.$eval(attrs.ctrlEnterBreakLine);
+          });
+          evt.preventDefault()
+        }
+      }
+    });
+  };
 
-nodechatApp.directive('autoScrollToBottom', function() {
+});
+techNodeApp.directive('autoScrollToBottom', function() {
   return {
-    link: function (scope, element, attrs) {
+    link: function(scope, element, attrs) {
       scope.$watch(
         function() {
           return element.children().length;
@@ -16,9 +39,9 @@ nodechatApp.directive('autoScrollToBottom', function() {
     }
   };
 });
-nodechatApp.directive('emojify', function() {
+techNodeApp.directive('emojify', function() {
   return {
-    link: function (scope, element, attrs) {
+    link: function(scope, element, attrs) {
       scope.$watch(
         function() {
           return element.html()
@@ -30,10 +53,10 @@ nodechatApp.directive('emojify', function() {
     }
   };
 });
-nodechatApp.directive('markdown', function() {
+techNodeApp.directive('markdown', function() {
   var converter = new Showdown.converter();
   return {
-    link: function (scope, element, attrs) {
+    link: function(scope, element, attrs) {
       scope.$watch(
         function() {
           return element.html()
@@ -45,7 +68,7 @@ nodechatApp.directive('markdown', function() {
     }
   };
 });
-nodechatApp.factory('socket', function($rootScope) {
+techNodeApp.factory('socket', function($rootScope) {
   var socket = io.connect('/')
   return {
     on: function(eventName, callback) {
@@ -69,7 +92,7 @@ nodechatApp.factory('socket', function($rootScope) {
   }
 })
 
-nodechatApp.config(function($routeProvider, $locationProvider) {
+techNodeApp.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
   $routeProvider.
   when('/login', {
@@ -77,15 +100,15 @@ nodechatApp.config(function($routeProvider, $locationProvider) {
     controller: 'LoginCtrl'
   }).
   when('/', {
-    templateUrl: '/src/partials/nodechat.html',
-    controller: 'NodeChatCtrl'
+    templateUrl: '/src/partials/technode.html',
+    controller: 'TechNodeCtrl'
   }).
   otherwise({
     redirectTo: '/'
   })
 })
 
-nodechatApp.controller('MainCtrl', function($scope, $location, $cookies, $cookieStore, socket) {
+techNodeApp.controller('MainCtrl', function($scope, $location, $cookies, $cookieStore, socket) {
   socket.on('read:rooms', function(rooms) {
     $scope.rooms = rooms
     $scope.selectedRoom = rooms[0]
@@ -110,13 +133,16 @@ nodechatApp.controller('MainCtrl', function($scope, $location, $cookies, $cookie
     $cookies.email = user.email
     $cookies.selectedRoomId = $scope.selectedRoom._id
   })
-  $scope.logout = function () {
+  $scope.logout = function() {
     $cookieStore.remove('email')
     $cookieStore.remove('selectedRoomId')
     window.location.reload()
   }
   $scope.$on('change:selectedRoom', function(evt, room) {
     $scope.selectedRoom = room
+  })
+  $scope.$on('change:rooms', function(evt, rooms) {
+    $scope.rooms = rooms
   })
   socket.on('logout', function(user) {
     if (user._id == $scope.userMe._id) {
@@ -148,10 +174,10 @@ nodechatApp.controller('MainCtrl', function($scope, $location, $cookies, $cookie
       }
     })
   })
-  socket.on('change:room', function (change) {
-    $scope.rooms.forEach(function (room) {
+  socket.on('change:room', function(change) {
+    $scope.rooms.forEach(function(room) {
       if (room._id == change.from._id) {
-        room.users = room.users.filter(function (user) {
+        room.users = room.users.filter(function(user) {
           return user._id != change.user._id
         })
       }
@@ -162,7 +188,7 @@ nodechatApp.controller('MainCtrl', function($scope, $location, $cookies, $cookie
   })
   socket.emit('read:rooms')
 })
-nodechatApp.controller('LoginCtrl', function($scope, $cookies, socket) {
+techNodeApp.controller('LoginCtrl', function($scope, $cookies, socket) {
   $scope.onSelectRoom = function(room) {
     $scope.selectedRoom = room
     $scope.$emit('change:selectedRoom', room)
@@ -174,7 +200,7 @@ nodechatApp.controller('LoginCtrl', function($scope, $cookies, socket) {
     })
   }
 })
-nodechatApp.controller('NodeChatCtrl', function($scope, $location, $cookies, socket) {
+techNodeApp.controller('TechNodeCtrl', function($scope, $location, $cookies, socket) {
   $scope.sendMessage = function() {
     socket.emit('add:message', {
       content: $scope.message,
@@ -183,7 +209,7 @@ nodechatApp.controller('NodeChatCtrl', function($scope, $location, $cookies, soc
     })
     $scope.message = ""
   }
-  $scope.changeSelectedRoom = function (room) {
+  $scope.changeSelectedRoom = function(room) {
     socket.emit('change:room', {
       from: $scope.selectedRoom,
       to: room,
@@ -192,18 +218,29 @@ nodechatApp.controller('NodeChatCtrl', function($scope, $location, $cookies, soc
     $scope.$emit('change:selectedRoom', room)
   }
 })
-nodechatApp.controller('RoomCreatorCtrl', function($scope, socket) {
+techNodeApp.controller('RoomCreatorCtrl', function($scope, socket) {
   $scope.isShow = false
-  $scope.toggleCreator = function () {
+  $scope.toggleCreator = function() {
     $scope.isShow = !$scope.isShow
   }
-  $scope.createRoom = function () {
+  $scope.createRoom = function() {
     socket.emit('create:room', {
       roomName: $scope.roomName
     })
   }
-  socket.on('add:room', function (room) {
+  socket.on('add:room', function(room) {
     $scope.rooms.push(room)
     $scope.isShow = false
   })
+})
+techNodeApp.controller('SearchCtrl', function($scope) {
+  $scope.filterRoom = function() {
+    $scope.rooms.forEach(function(room) {
+      if (room.name.indexOf($scope.key) === -1) {
+        room.hide = true
+      } else {
+        room.hide = false
+      }
+    })
+  }
 })

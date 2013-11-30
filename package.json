@@ -1,5 +1,5 @@
 {
-  "name": "nodechat",
+  "name": "TechNode",
   "version": "0.0.0",
   "description": "",
   "main": "app.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@bitbucket.org/island205/nodechat.git"
+    "url": "ssh://git@github.com:island205/TechNode.git"
   },
   "author": "",
   "license": "BSD-2-Clause",

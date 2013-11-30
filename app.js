@@ -22,4 +22,4 @@ io.sockets.on('connection', function (socket) {
 	require('./socket')(socket, io)
 })
 
-console.log("nodechat  is on port " + port + '!')
+console.log("TechNode  is on port " + port + '!')

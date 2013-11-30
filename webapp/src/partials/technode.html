@@ -1,6 +1,11 @@
-<div class="col-md-4">
-  <div class="list-group room-list" ng-controller="NodeChatCtrl">
-    <div class="list-group-item room-item {{(room.name == selectedRoom.name ? 'in' : '')}}" ng-repeat="room in rooms" ng-click="changeSelectedRoom(room)">
+<div class="col-md-4 left-sidebar" ng-controller="TechNodeCtrl">
+  <form>
+    <div class="form-group" ng-controller="SearchCtrl">
+      <input class="form-control search-room-input" ng-model="key" ng-change="filterRoom()" placeholder="Search room"></input>
+    </div>
+  </form>
+  <div class="list-group room-list">
+    <div class="list-group-item room-item {{(room.name == selectedRoom.name ? 'in' : '')}}" ng-repeat="room in rooms" ng-show="!room.hide" ng-click="changeSelectedRoom(room)">
       <h4>{{room.name}}<span class="badge pull-right">{{room.users.length}}</span></h4>
       <div class="avatar-list">
           <span ng-repeat="user in room.users" title="{{user.name}}">
@@ -11,7 +16,7 @@
   </div>
   <div class="add-room-panel" ng-controller="RoomCreatorCtrl">
     <p class="clearfix" ng-show="!isShow">
-      <a class="add-room-toggler" ng-click="toggleCreator()"><span class="glyphicon glyphicon-plus"></span> add room</a>
+      <button type="button" class="btn btn-link" ng-click="toggleCreator()"><span class="glyphicon glyphicon-plus"></span> Add room</button>
     </p>
     <form class="form-inline" ng-show="isShow" ng-submit="createRoom()">
       <div class="form-group">
@@ -33,13 +38,13 @@
           <div class="list-group-item message clearfix {{message.creator.name == userMe.name ? 'me': ''}}" ng-repeat="message in selectedRoom.messages">
             <img alt="{{message.creator.name}}"src="{{message.creator.avatar}}" class="">
             <div class="trangle"></div>
-            <p class="message-body" markdown emojify>{{message.content}}</p>
+            <div class="message-body" markdown emojify>{{message.content}}</div>
           </div>
         </div>
       </div>
       <form class="form-inline message-creator" ng-submit="sendMessage()">
         <div class="form-group">
-          <textarea required class="form-control message-input" ng-model="message"  placeholder="say something"></textarea>
+          <textarea required class="form-control message-input" ng-model="message"  placeholder="Ctrl+Enter to quick send" ctrl-enter-break-line="sendMessage()"></textarea>
         </div>
         <button type="submit" class="btn btn-success btn-send">send</button>
       </form>
