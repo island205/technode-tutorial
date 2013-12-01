@@ -6,9 +6,9 @@ var app = express();
 var port = process.env.PORT || 3000
 var fs = require('fs')
 
-app.use(express.static(__dirname + '/webapp'))
+app.use(express.static(__dirname + '/static'))
 
-var indexPage = fs.readFileSync('./webapp/index.html')
+var indexPage = fs.readFileSync('./static/index.html')
 
 app.use(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/html'})
