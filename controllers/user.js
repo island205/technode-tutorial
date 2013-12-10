@@ -31,3 +31,29 @@ exports.online = function(user, _roomId, callback) {
   user._roomId = _roomId
   user.save(callback)
 }
+
+exports.findByEmailOrCreate = function(email, _roomId, callback) {
+  exports.findByEmail(email, function(err, user) {
+    if (err) {
+      callback(err)
+    } else if (user) {
+      // 如果有用户，上线
+      exports.online(user,  _roomId, function(err, user) {
+        if (err) {
+          callback(err)
+        } else {
+          callback(null, user)
+        }
+      })
+    } else {
+      // 没有该用户，新建用户
+      exports.createByEmail(email, function(err, user) {
+        if (err) {
+          callback(err)
+        } else {
+          callback(null, user)
+        }
+      })
+    }
+  })
+}

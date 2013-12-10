@@ -1,9 +1,4 @@
 <div class="col-md-4 left-sidebar" ng-controller="TechNodeCtrl">
-  <form>
-    <div class="form-group" ng-controller="SearchCtrl">
-      <input class="form-control search-room-input" ng-model="key" ng-change="filterRoom()" placeholder="Search room"></input>
-    </div>
-  </form>
   <div class="list-group room-list">
     <div class="list-group-item room-item {{(room.name == selectedRoom.name ? 'in' : '')}}" ng-repeat="room in rooms" ng-show="!room.hide" ng-click="changeSelectedRoom(room)">
       <h4>{{room.name}}<span class="badge pull-right">{{room.users.length}}</span></h4>

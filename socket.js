@@ -1,4 +1,5 @@
 Controller = require('./controllers')
+_ = require('underscore')
 
 module.exports = function(socket, io) {
 
@@ -29,28 +30,18 @@ module.exports = function(socket, io) {
   })
 
   socket.on('login', function(data) {
-    Controller.User.findByEmail(data.email, function(err, user) {
+    var email = data.email
+    var _roomId = null
+    if (_.isString(data.selectedRoom)) {
+      _roomId = data.selectedRoom._id
+    }
+    Controller.User.findByEmailOrCreate(data.email, _roomId, function(err, user) {
       if (err) {
         handerErr(err)
-      } else if (user) {
-        Controller.User.online(user, data.selectedRoom._id, function(err, user) {
-          if (err) {
-            handerErr(err)
-          } else {
-            socket._userId = user._id
-            socket.emit('login', user)
-            io.sockets.emit('add:user', user)
-          }
-        })
       } else {
-        Controller.User.createByEmail(email, function(err, user) {
-          if (err) {
-            handerErr(err)
-          } else {
-            socket.emit('login', user)
-            io.sockets.emit('add:user', user)
-          }
-        })
+        socket._userId = user._id
+        socket.emit('login', user)
+        io.sockets.emit('add:user', user)
       }
     })
   })
