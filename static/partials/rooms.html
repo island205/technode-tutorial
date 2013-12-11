@@ -9,11 +9,11 @@
   </div>
 </div>
 <div class="row">
-  <ul class="rooms">
-    <li  ng-repeat="room in rooms">
-      <div>
+  <ul class="room-list">
+    <li  ng-repeat="room in rooms" class="room-item">
+      <div class="room-content">
         <h3>{{room.name}}<span class="badge pull-right">{{room.users.length}}</span></h3>
-        <div>
+        <div class="avatar-list">
             <span ng-repeat="user in room.users" title="{{user.name}}">
               <img alt="{{user.email}}" src="{{user.avatar}}" class="img-rounded"/>
             </span>

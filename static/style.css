@@ -18,30 +18,11 @@
   height: 55px;
 }
 
-.avatar-list img {
-  height: 25px;
-}
-
 .left-sidebar {
   padding: 15px;
   background-color: #f5f5f5;
   border: 1px solid #ddd;
   border-radius: 3px;
-}
-.room-list {
-  max-height: 447px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-}
-
-.room-item.in {
-  background-color: #f5f5f5;
-}
-
-.room-header {
-  font-size: 20px;
-  font-weight: bold;
 }
 
 .message {

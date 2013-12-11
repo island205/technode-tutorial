@@ -2,4 +2,30 @@
   text-align: center;
   padding: 20px;
   border-radius: 40px;
+  font-size: 18px;
+  letter-spacing: .5px;
+}
+
+.room-list .room-item {
+  list-style: none;
+  float:left;
+  height: 150px;
+  padding: 10px;
+  width: 25%;
+}
+.room-item .avatar-list {
+  padding: 5px;
+}
+.room-item .avatar-list img {
+  height: 20px;
+}
+
+.room-item .room-content {
+  padding: 10px;
+  height:100%;
+  border-radius: 5px;
+  box-shadow: 0 0 10px #aaa;
+}
+.room-content h3 {
+  margin:5px;
 }
