@@ -25,7 +25,17 @@
   height:100%;
   border-radius: 5px;
   box-shadow: 0 0 10px #aaa;
+  cursor: pointer;
 }
 .room-content h3 {
   margin:5px;
+}
+
+.no-room {
+  text-align:center;
+  margin: 200px;
+}
+
+.no-room-label {
+  font-size: 18px;
 }
