@@ -1,6 +1,6 @@
 angular.module('techNodeApp').controller('MainCtrl', function($scope, $location, $cookies, $cookieStore, socket) {
   socket.on('read:rooms', function(rooms) {
-    $scope.rooms = rooms
+    $scope.filteredRooms = $scope.rooms = rooms
     // 已经登录
     var selectedRoom = null
     if ($cookies.email) {

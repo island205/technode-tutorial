@@ -3,14 +3,14 @@
     <form>
       <div class="form-group">
         <label class="sr-only">Room name</label>
-        <input type="input" required class="form-control search-room-input" ng-model="searchKey" placeholder="Search Room" />
+        <input type="input" required class="form-control search-room-input" ng-change="searchRoom()" ng-model="searchKey" placeholder="Search Room" />
       </div>
     </form>
   </div>
 </div>
 <div class="row">
-  <ul class="room-list">
-    <li  ng-repeat="room in rooms" class="room-item">
+  <ul class="room-list clearfix">
+    <li  ng-repeat="room in filteredRooms" class="room-item">
       <div class="room-content">
         <h3>{{room.name}}<span class="badge pull-right">{{room.users.length}}</span></h3>
         <div class="avatar-list">
@@ -22,11 +22,10 @@
     </li>
   </ul>
 </div>
-<div class="row no-room">
+<div class="row no-room" ng-show="filteredRooms.length == 0">
     <form class="form-inline no-room-form">
       <div class="form-group">
-        Oh, there is no <strong class="label label-default no-room-label">JavaScript</strong> room, <button class="btn btn-warning">Create One!</button>
+        Oh, there is no <strong class="label label-default no-room-label">{{searchKey}}</strong> room, <button class="btn btn-warning">Create One!</button>
       </div>
     </form>
-  
 </div>

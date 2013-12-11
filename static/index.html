@@ -14,7 +14,7 @@
     <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/components/angular/angular.js"></script>
     <script type="text/javascript" src="/components/angular-route/angular-route.js"></script>
-		<script type="text/javascript" src="/components/angular-cookies/angular-cookies.js"></script>
+    <script type="text/javascript" src="/components/angular-cookies/angular-cookies.js"></script>
   </head>
   <body  ng-controller="MainCtrl">
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -22,16 +22,16 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#">TechNode</a>
         </div>
-				<nav class="collapse navbar-collapse" role="navigation">
-				  <ul class="nav navbar-nav navbar-right" ng-show="userMe">
-				    <li>
-							<img alt="{{userMe.name}}" src="{{userMe.avatar}}" class="img-rounded"/>
-				    </li>
+        <nav class="collapse navbar-collapse" role="navigation">
+          <ul class="nav navbar-nav navbar-right" ng-show="userMe">
+            <li>
+              <img alt="{{userMe.name}}" src="{{userMe.avatar}}" class="img-rounded"/>
+            </li>
             <li>
               <a href="" ng-click="logout()">Log out</a>
             </li>
-				  </ul>
-				</nav>
+          </ul>
+        </nav>
       </div>
     </div>
     <div class="container" style="margin-top:100px;">

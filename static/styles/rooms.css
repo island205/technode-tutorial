@@ -6,6 +6,10 @@
   letter-spacing: .5px;
 }
 
+.room-list {
+  margin-top: 30px;
+}
+
 .room-list .room-item {
   list-style: none;
   float:left;
@@ -26,6 +30,11 @@
   border-radius: 5px;
   box-shadow: 0 0 10px #aaa;
   cursor: pointer;
+  transition: all 218ms;
+}
+.room-item .room-content:hover {
+  -webkit-transform: scale(1.05);
+  box-shadow: 0 0 20px #aaa;
 }
 .room-content h3 {
   margin:5px;
