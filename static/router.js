@@ -9,9 +9,9 @@ angular.module('techNodeApp').config(function($routeProvider, $locationProvider)
     templateUrl: '/partials/login.html',
     controller: 'LoginCtrl'
   }).
-  when('/', {
-    templateUrl: '/partials/technode.html',
-    controller: 'TechNodeCtrl'
+  when('/rooms/:id', {
+    templateUrl: '/partials/room.html',
+    controller: 'RoomCtrl'
   }).
   otherwise({
     redirectTo: '/'

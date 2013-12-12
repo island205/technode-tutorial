@@ -51,9 +51,18 @@ exports.findByEmailOrCreate = function(email, _roomId, callback) {
         if (err) {
           callback(err)
         } else {
-          callback(null, user)
+          exports.online(user, _roomId, callback)
         }
       })
     }
   })
+}
+exports.enterRoom = function(email, _roomId, callback) {
+  db.User.findOneAndUpdate({
+    email: email
+  }, {
+    $set: {
+      _roomId: _roomId
+    }
+  }, callback)
 }

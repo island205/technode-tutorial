@@ -4,14 +4,8 @@ angular.module('techNodeApp').controller('MainCtrl', function($scope, $location,
     // 已经登录
     var selectedRoom = null
     if ($cookies.email) {
-      rooms.forEach(function(room) {
-        if (room._id == $cookies['selectedRoomId']) {
-          selectedRoom = room
-        }
-      })
       socket.emit('login', {
-        email: $cookies.email,
-        selectedRoom: selectedRoom
+        email: $cookies.email
       })
     // 否则登录
     } else {
@@ -22,18 +16,10 @@ angular.module('techNodeApp').controller('MainCtrl', function($scope, $location,
     $scope.userMe = user
     $location.path('/')
     $cookies.email = user.email
-    // 登录后，如果已经选择了房间，则直接进入房间
-    if(!!user._roomId) {
-      $cookies.selectedRoomId = $scope.selectedRoom._id = user._roomId
-      $location.path('/rooms/' + user._roomId)
-    // 否则，选择或者新建方面
-    } else {
-      $location.path('/rooms')
-    }
+    $location.path('/rooms')
   })
   $scope.logout = function() {
     $cookieStore.remove('email')
-    $cookieStore.remove('selectedRoomId')
     window.location.reload()
   }
   $scope.$on('change:selectedRoom', function(evt, room) {

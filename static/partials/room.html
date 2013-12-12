@@ -1,0 +1,26 @@
+<div class="col-md-12">
+  <div class="panel panel-default room">
+    <div class="panel-heading room-header">{{selectedRoom.name}}</div>
+    <div class="panel-body room-content">
+      <div class="timeline">
+        <div class="list-group" auto-scroll-to-bottom>
+          <div class="list-group-item message clearfix {{message.creator.name == userMe.name ? 'me': ''}}" ng-repeat="message in selectedRoom.messages">
+            <img alt="{{message.creator.name}}"src="{{message.creator.avatar}}" class="">
+            <div class="trangle"></div>
+            <div class="message-body" markdown emojify>{{message.content}}</div>
+          </div>
+        </div>
+        <form class="form-inline message-creator" ng-submit="sendMessage()">
+          <div class="form-group">
+            <textarea required class="form-control message-input" ng-model="message"  placeholder="Ctrl+Enter to quick send" ctrl-enter-break-line="sendMessage()"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="list-group user-list">
+        <div class="list-group-item user" ng-repeat="user in selectedRoom.users">
+          {{user.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

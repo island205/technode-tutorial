@@ -32,7 +32,7 @@ module.exports = function(socket, io) {
   socket.on('login', function(data) {
     var email = data.email
     var _roomId = null
-    if (_.isString(data.selectedRoom)) {
+    if (_.isObject(data.selectedRoom)) {
       _roomId = data.selectedRoom._id
     }
     Controller.User.findByEmailOrCreate(data.email, _roomId, function(err, user) {
@@ -41,7 +41,6 @@ module.exports = function(socket, io) {
       } else {
         socket._userId = user._id
         socket.emit('login', user)
-        io.sockets.emit('add:user', user)
       }
     })
   })
@@ -67,8 +66,16 @@ module.exports = function(socket, io) {
       }
     })
   })
-
-  socket.on('change:room', function(change) {
-    io.sockets.emit('change:room', change)
+  socket.on('enter:room', function(data) {
+    Controller.User.enterRoom(data.user.email, data.room._id, function (err, user) {
+      if (err) {
+        handerErr(err)
+      } else {
+        io.sockets.emit('enter:room', {
+          user: user,
+          room: data.room
+        })
+      }
+    })
   })
 }

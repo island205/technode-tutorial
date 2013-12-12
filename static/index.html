@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="http://cdn.staticfile.org/emojify.js/0.9.0/css/emojify.css">
     <link href="/style.css" rel="stylesheet" media="screen">
     <link href="/styles/rooms.css" rel="stylesheet" media="screen">
+    <link href="/styles/room.css" rel="stylesheet" media="screen">
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="http://cdn.staticfile.org/emojify.js/0.9.0/emojify.js"></script>
     <script type="text/javascript" src="/components/jquery/jquery.js"></script>
@@ -23,6 +24,11 @@
           <a class="navbar-brand" href="#">TechNode</a>
         </div>
         <nav class="collapse navbar-collapse" role="navigation">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="/rooms">Rooms</a>
+            </li>
+          </ul>
           <ul class="nav navbar-nav navbar-right" ng-show="userMe">
             <li>
               <img alt="{{userMe.name}}" src="{{userMe.avatar}}" class="img-rounded"/>
@@ -49,7 +55,7 @@
   <script type="text/javascript" src="/controllers/main.js"></script>
   <script type="text/javascript" src="/controllers/login.js"></script>
   <script type="text/javascript" src="/controllers/rooms.js"></script>
-  <script type="text/javascript" src="/controllers/tech-node.js"></script>
+  <script type="text/javascript" src="/controllers/room.js"></script>
   <script type="text/javascript" src="/controllers/room-creator.js"></script>
   <script type="text/javascript" src="/controllers/search.js"></script>
 </html>
