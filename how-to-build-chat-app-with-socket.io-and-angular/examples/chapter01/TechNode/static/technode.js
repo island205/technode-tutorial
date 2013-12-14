@@ -24,34 +24,6 @@ angular.module('techNodeApp').factory('socket', function($rootScope) {
   }
 })
 
-angular.module('techNodeApp').directive('autoScrollToBottom', function() {
-  return {
-    link: function(scope, element, attrs) {
-      scope.$watch(
-        function() {
-          return element.children().length;
-        },
-        function() {
-          element.animate({
-            scrollTop: element.prop('scrollHeight')
-          }, 1000);
-        }
-      );
-    }
-  };
-});
-
-angular.module('techNodeApp').controller('RoomCtrl', function($scope, socket) {
-  $scope.messages = []
-  socket.on('messages.read', function (messages) {
-    $scope.messages = messages
-  })
-  socket.on('messages.add', function (message) {
-    $scope.messages.push(message)
-  })
-  socket.emit('messages.read')
-})
-
 angular.module('techNodeApp').directive('ctrlEnterBreakLine', function() {
   return function(scope, element, attrs) {
     var ctrlDown = false
@@ -81,4 +53,32 @@ angular.module('techNodeApp').controller('MessageCreatorCtrl', function($scope, 
     socket.emit('messages.create', $scope.newMessage)
     $scope.newMessage = ''
   }
+})
+
+angular.module('techNodeApp').directive('autoScrollToBottom', function() {
+  return {
+    link: function(scope, element, attrs) {
+      scope.$watch(
+        function() {
+          return element.children().length;
+        },
+        function() {
+          element.animate({
+            scrollTop: element.prop('scrollHeight')
+          }, 1000);
+        }
+      );
+    }
+  };
+});
+
+angular.module('techNodeApp').controller('RoomCtrl', function($scope, socket) {
+  $scope.messages = []
+  socket.on('messages.read', function (messages) {
+    $scope.messages = messages
+  })
+  socket.on('messages.add', function (message) {
+    $scope.messages.push(message)
+  })
+  socket.emit('messages.read')
 })
