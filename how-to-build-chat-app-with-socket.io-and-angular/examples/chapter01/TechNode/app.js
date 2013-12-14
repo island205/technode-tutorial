@@ -11,7 +11,7 @@ app.use(function (req, res) {
 var io = require('socket.io').listen(app.listen(port))
 
 io.sockets.on('connection', function (socket) {
-	require('./socket')(socket, io)
+  console.log('someone connected!')
 })
 
 console.log("TechNode  is on port " + port + '!')
