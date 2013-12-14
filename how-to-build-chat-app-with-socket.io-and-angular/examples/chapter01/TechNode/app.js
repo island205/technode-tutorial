@@ -19,7 +19,7 @@ io.sockets.on('connection', function (socket) {
   })
   socket.on('messages.create', function (message) {
     messages.push(message)
-    io.sockets.emit('message.add', message)
+    io.sockets.emit('messages.add', message)
   })
 })
 
