@@ -1,0 +1,10 @@
+.room .messages {
+    height: 400px;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+}
+
+.room .message-creator {
+    margin-top: 15px;
+    width: 100%;
+}
