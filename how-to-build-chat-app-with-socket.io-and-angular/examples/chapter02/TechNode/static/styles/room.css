@@ -8,3 +8,8 @@
     margin-top: 15px;
     width: 100%;
 }
+
+.room .message img {
+  height: 18px;
+  margin-right: 0.5em;
+}

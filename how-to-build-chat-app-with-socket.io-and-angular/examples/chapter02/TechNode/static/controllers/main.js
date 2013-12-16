@@ -17,7 +17,6 @@ angular.module('techNodeApp').controller('MainCtrl', function($scope, $http, $lo
       $location.path('/login')
     })
   }
-
   $scope.$on('login', function (evt, me) {
     $scope.me = me
   })
