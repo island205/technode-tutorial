@@ -1,4 +1,5 @@
 var express = require('express')
+var async = require('async')
 var app = express()
 var port = process.env.PORT || 3000
 var Controllers = require('./controllers')
@@ -106,9 +107,10 @@ io.set('authorization', function(handshakeData, accept) {
   }
 })
 
-
-var messages = []
-var socketMap = {}
+var SYSTEM = {
+  name: 'technode机器人',
+  avatarUrl: 'http://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Robot_icon.svg/220px-Robot_icon.svg.png'
+}
 
 io.sockets.on('connection', function(socket) {
   _userId = socket.handshake.session._userId
@@ -119,6 +121,11 @@ io.sockets.on('connection', function(socket) {
       })
     } else {
       socket.broadcast.emit('users.add', user)
+      socket.broadcast.emit('messages.add', {
+        content: user.name + '进入了聊天室',
+        creator: SYSTEM,
+        createAt: new Date()
+      })
     }
   })
   socket.on('disconnect', function() {
@@ -129,26 +136,44 @@ io.sockets.on('connection', function(socket) {
         })
       } else {
         socket.broadcast.emit('users.remove', user)
+        socket.broadcast.emit('messages.add', {
+          content: user.name + '离开了聊天室',
+          creator: SYSTEM,
+          createAt: new Date()
+        })
       }
     })
   });
   socket.on('technode.read', function() {
-    Controllers.User.getOnlineUsers(function(err, users) {
+    async.parallel([
+      function(done) {
+        Controllers.User.getOnlineUsers(done)
+      },
+      function(done) {
+        Controllers.Message.read(done)
+      }
+    ],
+    function(err, results) {
       if (err) {
         socket.emit('err', {
           msg: err
         })
       } else {
         socket.emit('technode.read', {
-          users: users,
-          messages: messages
+          users: results[0],
+          messages: results[1]
         })
       }
-    })
+    });
   })
   socket.on('messages.create', function(message) {
-    messages.push(message)
-    io.sockets.emit('messages.add', message)
+    Controllers.Message.create(message, function (err, message) {
+      if (err) {
+        socket.emit('err', {msg: err})
+      } else {
+        io.sockets.emit('messages.add', message)
+      }
+    })
   })
 })
 

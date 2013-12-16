@@ -13,6 +13,9 @@
   height: 18px;
   margin-right: 0.5em;
 }
+.room .message time {
+  color: #aaa;
+}
 .user-list .user img {
   height: 18px;
   margin-right: 0.5em;

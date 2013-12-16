@@ -4,7 +4,7 @@
     <div class="panel-body room-content">
       <div class="list-group messages" auto-scroll-to-bottom>
         <div class="list-group-item message" ng-repeat="message in technode.messages">
-          <img src="{{message.creator.avatarUrl}}" title="{{message.creator.name}}" class="img-rounded"/>{{message.creator.name}}: {{message.message}}
+          <img src="{{message.creator.avatarUrl}}" title="{{message.creator.name}}" class="img-rounded"/>{{message.creator.name}}: {{message.content}}<time am-time-ago="message.createAt"></time>
         </div>
       </div>
       <form class="message-creator" ng-controller="MessageCreatorCtrl">
