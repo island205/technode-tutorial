@@ -1,0 +1,22 @@
+{
+  "name": "TechNode",
+  "version": "0.0.0",
+  "homepage": "https://github.com/island205/TechNode",
+  "authors": [
+    "island205 <island205@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.0.3",
+    "angular": "~1.2.5",
+    "angular-route": "~1.2.5",
+    "angular-moment": "~0.5.2"
+  }
+}
