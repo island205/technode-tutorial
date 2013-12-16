@@ -1,10 +1,18 @@
 angular.module('techNodeApp').controller('RoomCtrl', function($scope, socket) {
-  $scope.messages = []
-  socket.on('messages.read', function (messages) {
-    $scope.messages = messages
+  socket.on('technode.read', function (technode) {
+    $scope.technode = technode
   })
   socket.on('messages.add', function (message) {
-    $scope.messages.push(message)
+    $scope.technode.messages.push(message)
   })
-  socket.emit('messages.read')
+  socket.emit('technode.read')
+  socket.on('users.add', function (user) {
+    $scope.technode.users.push(user)
+  })
+  socket.on('users.remove', function (user) {
+    _userId = user._id
+    $scope.technode.users = $scope.technode.users.filter(function (user) {
+      return user._id != _userId
+    })
+  })
 })

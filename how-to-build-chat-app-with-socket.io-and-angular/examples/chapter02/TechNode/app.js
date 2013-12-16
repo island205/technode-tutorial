@@ -47,7 +47,15 @@ app.post('/ajax/login', function(req, res) {
         })
       } else {
         req.session._userId = user._id
-        res.json(user)
+        Controllers.User.online(user._id, function(err, user) {
+          if (err) {
+            res.json(500, {
+              msg: err
+            })
+          } else {
+            res.json(user)
+          }
+        })
       }
     })
   } else {
@@ -56,8 +64,17 @@ app.post('/ajax/login', function(req, res) {
 })
 
 app.get('/ajax/logout', function(req, res) {
-  req.session._userId = null
-  res.json(401)
+  _userId = req.session._userId
+  Controllers.User.offline(_userId, function(err, user) {
+    if (err) {
+      res.json(500, {
+        msg: err
+      })
+    } else {
+      res.json(200)
+      delete req.session._userId
+    }
+  })
 })
 
 app.use(function(req, res) {
@@ -91,10 +108,43 @@ io.set('authorization', function(handshakeData, accept) {
 
 
 var messages = []
+var socketMap = {}
 
 io.sockets.on('connection', function(socket) {
-  socket.on('messages.read', function() {
-    socket.emit('messages.read', messages)
+  _userId = socket.handshake.session._userId
+  Controllers.User.online(_userId, function(err, user) {
+    if (err) {
+      socket.emit('err', {
+        mesg: err
+      })
+    } else {
+      socket.broadcast.emit('users.add', user)
+    }
+  })
+  socket.on('disconnect', function() {
+    Controllers.User.offline(_userId, function(err, user) {
+      if (err) {
+        socket.emit('err', {
+          mesg: err
+        })
+      } else {
+        socket.broadcast.emit('users.remove', user)
+      }
+    })
+  });
+  socket.on('technode.read', function() {
+    Controllers.User.getOnlineUsers(function(err, users) {
+      if (err) {
+        socket.emit('err', {
+          msg: err
+        })
+      } else {
+        socket.emit('technode.read', {
+          users: users,
+          messages: messages
+        })
+      }
+    })
   })
   socket.on('messages.create', function(message) {
     messages.push(message)
