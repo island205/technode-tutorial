@@ -175,6 +175,26 @@ io.sockets.on('connection', function(socket) {
       }
     })
   })
+
+  socket.on('rooms.create', function (room) {
+    Controllers.Room.create(room, function (err, room) {
+      if (err) {
+        socket.emit('err', {msg: err})
+      } else {
+        io.sockets.emit('rooms.add', room)
+      }
+    })
+  })
+
+  sockets.on('rooms.read', function () {
+    Controllers.Room.read(function (err, rooms) {
+      if (err) {
+        socket.emit('err', {msg: err})
+      } else {
+        socket.emit('rooms.read', rooms)
+      }
+    })
+  })
 })
 
 console.log("TechNode  is on port " + port + '!')

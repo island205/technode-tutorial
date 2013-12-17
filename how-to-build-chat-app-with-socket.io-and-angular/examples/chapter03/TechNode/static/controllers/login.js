@@ -8,7 +8,7 @@ angular.module('techNodeApp').controller('LoginCtrl', function($scope, $http, $l
       }
     }).success(function (user) {
       $scope.$emit('login', user)
-      $location.path('/')
+      $location.path('/rooms')
     }).error(function (data) {
       $location.path('/login')
     })

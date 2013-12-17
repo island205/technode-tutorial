@@ -4,7 +4,7 @@ angular.module('techNodeApp').controller('MainCtrl', function($scope, $http, $lo
     method: 'GET'
   }).success(function (user) {
     $scope.me = user
-    $location.path('/')
+    $location.path('/rooms')
   }).error(function (data) {
     $location.path('/login')
   })
