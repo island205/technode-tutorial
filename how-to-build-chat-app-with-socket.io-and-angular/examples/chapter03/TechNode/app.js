@@ -181,12 +181,13 @@ io.sockets.on('connection', function(socket) {
       if (err) {
         socket.emit('err', {msg: err})
       } else {
+        rooms.users = []
         io.sockets.emit('rooms.add', room)
       }
     })
   })
 
-  sockets.on('rooms.read', function () {
+  socket.on('rooms.read', function () {
     Controllers.Room.read(function (err, rooms) {
       if (err) {
         socket.emit('err', {msg: err})
