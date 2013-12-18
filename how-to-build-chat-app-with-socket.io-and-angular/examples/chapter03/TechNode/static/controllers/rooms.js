@@ -1,11 +1,11 @@
 angular.module('techNodeApp').controller('RoomsCtrl', function($scope, socket) {
   $scope.searchRoom = function () {
     if ($scope.searchKey) {
-      $scope.rooms = $scope._rooms.filter(function (room) {
+      $scope.filteredRooms = $scope.rooms.filter(function (room) {
         return room.name.indexOf($scope.searchKey) > -1
       })
     } else {
-      $scope.rooms = $scope._rooms
+      $scope.filteredRooms = $scope.rooms
     }
 
   }
@@ -15,10 +15,10 @@ angular.module('techNodeApp').controller('RoomsCtrl', function($scope, socket) {
     })
   }
   socket.on('rooms.read', function (rooms) {
-    $scope.rooms = $scope._rooms = rooms
+    $scope.filteredRooms = $scope.rooms = rooms
   })
   socket.on('rooms.add', function (room) {
-    $scope._rooms.push(room)
+    $scope.rooms.push(room)
     $scope.searchRoom()
   })
   socket.emit('rooms.read')

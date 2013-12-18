@@ -10,9 +10,9 @@
 </div>
 <div class="row">
   <ul class="room-list clearfix">
-    <li  ng-repeat="room in rooms" class="room-item">
+    <li  ng-repeat="room in filteredRooms" class="room-item">
       <div class="room-content" ng-click="enterRoom(room)">
-        <h3>{{room.name}}<span class="badge pull-right">{{room.users.length}}</span>人</h3>
+        <h3>{{room.name}}<span class="badge pull-right">{{room.users.length}}人</span></h3>
         <div class="avatar-list">
             <span ng-repeat="user in room.users" title="{{user.name}}">
               <img alt="{{user.email}}" src="{{user.avatarUrl}}" class="img-rounded"/>
@@ -22,7 +22,7 @@
     </li>
   </ul>
 </div>
-<div class="row no-room" ng-show="rooms.length == 0 && searchKey">
+<div class="row no-room" ng-show="filteredRooms.length == 0 && searchKey">
     <form class="form-inline no-room-form">
       <div class="form-group">
         没找到你想要的房间<strong class="label label-default no-room-label">{{searchKey}}</strong>，<button class="btn btn-warning" ng-click="createRoom()">点击新建</button>
