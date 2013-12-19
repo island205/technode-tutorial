@@ -1,4 +1,4 @@
-angular.module('techNodeApp').controller('RoomsCtrl', function($scope, socket) {
+angular.module('techNodeApp').controller('RoomsCtrl', function($scope, $location, socket) {
   $scope.searchRoom = function () {
     if ($scope.searchKey) {
       $scope.filteredRooms = $scope.rooms.filter(function (room) {
@@ -12,6 +12,15 @@ angular.module('techNodeApp').controller('RoomsCtrl', function($scope, socket) {
   $scope.createRoom = function () {
     socket.emit('rooms.create', {
       name: $scope.searchKey
+    })
+  }
+  socket.on('users.join.' + $scope.me._id, function (join) {
+    $location.path('/rooms/' + join.room._id)
+  })
+  $scope.enterRoom = function (room) {
+    socket.emit('users.join', {
+      user: $scope.me,
+      room: room
     })
   }
   socket.on('rooms.read', function (rooms) {

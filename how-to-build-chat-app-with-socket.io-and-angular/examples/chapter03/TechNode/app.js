@@ -4,17 +4,19 @@ var app = express()
 var port = process.env.PORT || 3000
 var Controllers = require('./controllers')
 var parseSignedCookie = require('connect').utils.parseSignedCookie
-var MemoryStore = require('connect').session.MemoryStore
+var MongoStore = require('connect-mongo')(express)
 var Cookie = require('cookie')
 
-var sessionStore = new MemoryStore()
+var sessionStore = new MongoStore({
+  url: 'mongodb://localhost/technodechapter02'
+})
 
 app.use(express.bodyParser())
 app.use(express.cookieParser())
 app.use(express.session({
   secret: 'technode',
   cookie: {
-    maxAge: 60 * 1000
+    maxAge: 60 * 1000 * 10
   },
   store: sessionStore
 }))
@@ -146,53 +148,86 @@ io.sockets.on('connection', function(socket) {
   });
   socket.on('technode.read', function() {
     async.parallel([
-      function(done) {
-        Controllers.User.getOnlineUsers(done)
-      },
-      function(done) {
-        Controllers.Message.read(done)
-      }
-    ],
-    function(err, results) {
+
+        function(done) {
+          Controllers.User.getOnlineUsers(done)
+        },
+        function(done) {
+          Controllers.Message.read(done)
+        }
+      ],
+      function(err, results) {
+        if (err) {
+          socket.emit('err', {
+            msg: err
+          })
+        } else {
+          socket.emit('technode.read', {
+            users: results[0],
+            messages: results[1]
+          })
+        }
+      });
+  })
+  socket.on('messages.create', function(message) {
+    Controllers.Message.create(message, function(err, message) {
       if (err) {
         socket.emit('err', {
           msg: err
         })
       } else {
-        socket.emit('technode.read', {
-          users: results[0],
-          messages: results[1]
-        })
-      }
-    });
-  })
-  socket.on('messages.create', function(message) {
-    Controllers.Message.create(message, function (err, message) {
-      if (err) {
-        socket.emit('err', {msg: err})
-      } else {
-        io.sockets.emit('messages.add', message)
+        socket. in (message._roomId).broadcast.emit('messages.add', message)
+        socket.emit('messages.add', message)
       }
     })
   })
 
-  socket.on('rooms.create', function (room) {
-    Controllers.Room.create(room, function (err, room) {
+  socket.on('rooms.create', function(room) {
+    Controllers.Room.create(room, function(err, room) {
       if (err) {
-        socket.emit('err', {msg: err})
+        socket.emit('err', {
+          msg: err
+        })
       } else {
-        rooms.users = []
+        room.users = []
         io.sockets.emit('rooms.add', room)
       }
     })
   })
 
-  socket.on('rooms.read', function () {
-    Controllers.Room.read(function (err, rooms) {
+  socket.on('rooms.read', function(data) {
+    if (data && data._roomId) {
+      Controllers.Room.getById(data._roomId, function(err, room) {
+        if (err) {
+          socket.emit('err', {
+            msg: err
+          })
+        } else {
+          socket.emit('rooms.read.' + data._roomId, room)
+        }
+      })
+    } else {
+      Controllers.Room.read(function(err, rooms) {
+        if (err) {
+          socket.emit('err', {
+            msg: err
+          })
+        } else {
+          socket.emit('rooms.read', rooms)
+        }
+      })
+    }
+  })
+
+  socket.on('users.join', function(join) {
+    Controllers.User.joinRoom(join, function(err) {
       if (err) {
-        socket.emit('err', {msg: err})
+        socket.emit('err', {
+          msg: err
+        })
       } else {
-        socket.emit('rooms.read', rooms)
+        socket.join(join.room._id)
+        socket.emit('users.join.' + join.user._id, join)
       }
     })
   })
