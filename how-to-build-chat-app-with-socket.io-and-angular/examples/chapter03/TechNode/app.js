@@ -75,7 +75,7 @@ app.get('/ajax/logout', function(req, res) {
       })
     } else {
       res.json(200)
-      delete req.session._userId
+      delete req.session.destroy()
     }
   })
 })
@@ -115,7 +115,7 @@ var SYSTEM = {
 }
 
 io.sockets.on('connection', function(socket) {
-  _userId = socket.handshake.session._userId
+  var _userId = socket.handshake.session._userId
   Controllers.User.online(_userId, function(err, user) {
     if (err) {
       socket.emit('err', {
@@ -131,6 +131,7 @@ io.sockets.on('connection', function(socket) {
     }
   })
   socket.on('disconnect', function() {
+    console.log('disconnect' + _userId)
     Controllers.User.offline(_userId, function(err, user) {
       if (err) {
         socket.emit('err', {
@@ -145,29 +146,6 @@ io.sockets.on('connection', function(socket) {
         })
       }
     })
-  });
-  socket.on('technode.read', function() {
-    async.parallel([
-
-        function(done) {
-          Controllers.User.getOnlineUsers(done)
-        },
-        function(done) {
-          Controllers.Message.read(done)
-        }
-      ],
-      function(err, results) {
-        if (err) {
-          socket.emit('err', {
-            msg: err
-          })
-        } else {
-          socket.emit('technode.read', {
-            users: results[0],
-            messages: results[1]
-          })
-        }
-      });
   })
   socket.on('messages.create', function(message) {
     Controllers.Message.create(message, function(err, message) {
@@ -176,7 +154,7 @@ io.sockets.on('connection', function(socket) {
           msg: err
         })
       } else {
-        socket. in (message._roomId).broadcast.emit('messages.add', message)
+        socket.in(message._roomId).broadcast.emit('messages.add', message)
         socket.emit('messages.add', message)
       }
     })

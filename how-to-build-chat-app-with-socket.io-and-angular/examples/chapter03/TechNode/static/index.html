@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>TechNode</title>
     <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/login.css">
     <link rel="stylesheet" href="/styles/rooms.css">
     <link rel="stylesheet" href="/styles/room.css">
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
@@ -16,14 +17,14 @@
     <script type="text/javascript" src="/components/angular-moment/angular-moment.js"></script>
     <script type="text/javascript" src="/components/moment/lang/zh-cn.js"></script>
   </head>
-  <body ng-controller="MainCtrl">
+  <body>
     <div class="navbar navbar-inverse technode-nav navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">TechNode</a>
         </div>
         <nav class="collapse navbar-collapse" role="navigation">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav" ng-show="me">
             <li ng-class="{active:true}">
               <a href="/rooms">房间列表</a>
             </li>
