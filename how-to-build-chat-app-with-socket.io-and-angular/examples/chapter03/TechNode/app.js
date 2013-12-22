@@ -6,6 +6,7 @@ var Controllers = require('./controllers')
 var parseSignedCookie = require('connect').utils.parseSignedCookie
 var MongoStore = require('connect-mongo')(express)
 var Cookie = require('cookie')
+var ObjectId = require('mongoose').Schema.ObjectId
 
 var sessionStore = new MongoStore({
   url: 'mongodb://localhost/technodechapter02'
@@ -16,7 +17,7 @@ app.use(express.cookieParser())
 app.use(express.session({
   secret: 'technode',
   cookie: {
-    maxAge: 60 * 1000 * 10
+    maxAge: 60 * 1000 * 60
   },
   store: sessionStore
 }))
@@ -122,28 +123,37 @@ io.sockets.on('connection', function(socket) {
         mesg: err
       })
     } else {
-      socket.broadcast.emit('users.add', user)
-      socket.broadcast.emit('messages.add', {
-        content: user.name + '进入了聊天室',
-        creator: SYSTEM,
-        createAt: new Date()
-      })
+      if (user._roomId) {
+        socket.join(user._roomId)
+        socket.in(user._roomId).broadcast.emit('users.join', user)
+        socket.in(user._roomId).broadcast.emit('messages.add', {
+          content: user.name + '进入了聊天室',
+          creator: SYSTEM,
+          createAt: new Date(),
+          _id: ObjectId()
+        })
+      }
+
     }
   })
   socket.on('disconnect', function() {
-    console.log('disconnect' + _userId)
     Controllers.User.offline(_userId, function(err, user) {
       if (err) {
         socket.emit('err', {
           mesg: err
         })
       } else {
-        socket.broadcast.emit('users.remove', user)
-        socket.broadcast.emit('messages.add', {
-          content: user.name + '离开了聊天室',
-          creator: SYSTEM,
-          createAt: new Date()
-        })
+        if (user._roomId) {
+          socket.in(user._roomId).broadcast.emit('users.leave', user)
+          socket.in(user._roomId).broadcast.emit('messages.add', {
+            content: user.name + '离开了聊天室',
+            creator: SYSTEM,
+            createAt: new Date(),
+            _id: ObjectId()
+          })
+          Controllers.User.leaveRoom({user: user}, function() {})
+        }
+
       }
     })
   })
@@ -207,13 +217,19 @@ io.sockets.on('connection', function(socket) {
       } else {
         socket.join(join.room._id)
         socket.emit('users.join.' + join.user._id, join)
-        io.sockets.emit('users.join', join)
+        socket.in(join.room._id).broadcast.emit('messages.add', {
+          content: join.user.name + '进入了聊天室',
+          creator: SYSTEM,
+          createAt: new Date(),
+          _id: ObjectId()
+        })
+        socket.in(join.room._id).broadcast.emit('users.join', join)
       }
     })
   })
 
-  socket.on('users.leave', function (leave) {
-    Controllers.User.leaveRoom(leave, function (err) {
+  socket.on('users.leave', function(leave) {
+    Controllers.User.leaveRoom(leave, function(err) {
       if (err) {
         socket.emit('err', {
           msg: err
@@ -222,7 +238,8 @@ io.sockets.on('connection', function(socket) {
         socket.in(leave.room._id).broadcast.emit('messages.add', {
           content: leave.user.name + '离开了聊天室',
           creator: SYSTEM,
-          createAt: new Date()
+          createAt: new Date(),
+          _id: ObjectId()
         })
         socket.leave(leave.room._id)
         io.sockets.emit('users.leave', leave)

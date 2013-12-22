@@ -55,7 +55,7 @@ exports.getById = function(_roomId, callback) {
               _roomId: _roomId
             }, null, {
               sort: {
-                'createAt': 1
+                'createAt': -1
               },
               limit: 20
             }, function(err, messages) {
