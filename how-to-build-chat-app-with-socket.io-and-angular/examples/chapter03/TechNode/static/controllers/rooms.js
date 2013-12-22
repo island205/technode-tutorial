@@ -30,5 +30,24 @@ angular.module('techNodeApp').controller('RoomsCtrl', function($scope, $location
     $scope.rooms.push(room)
     $scope.searchRoom()
   })
+  socket.on('users.join', function (join) {
+    $scope.rooms.forEach(function (room) {
+      if (room._id == join.room._id) {
+        room.users.push(join.user)
+      }
+    })
+  })
+  socket.on('users.leave', function(leave) {
+    _userId = leave.user._id
+    if ($scope.rooms) {
+      $scope.rooms.forEach(function (room) {
+        if (room._id == leave.room._id) {
+          room.users = room.users.filter(function (user) {
+            return user._id != leave.user._id
+          })
+        }
+      })
+    }
+  })
   socket.emit('rooms.read')
 })

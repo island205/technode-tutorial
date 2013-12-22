@@ -167,6 +167,7 @@ io.sockets.on('connection', function(socket) {
           msg: err
         })
       } else {
+        room = room.toObject()
         room.users = []
         io.sockets.emit('rooms.add', room)
       }
@@ -206,6 +207,25 @@ io.sockets.on('connection', function(socket) {
       } else {
         socket.join(join.room._id)
         socket.emit('users.join.' + join.user._id, join)
+        io.sockets.emit('users.join', join)
+      }
+    })
+  })
+
+  socket.on('users.leave', function (leave) {
+    Controllers.User.leaveRoom(leave, function (err) {
+      if (err) {
+        socket.emit('err', {
+          msg: err
+        })
+      } else {
+        socket.in(leave.room._id).broadcast.emit('messages.add', {
+          content: leave.user.name + '离开了聊天室',
+          creator: SYSTEM,
+          createAt: new Date()
+        })
+        socket.leave(leave.room._id)
+        io.sockets.emit('users.leave', leave)
       }
     })
   })

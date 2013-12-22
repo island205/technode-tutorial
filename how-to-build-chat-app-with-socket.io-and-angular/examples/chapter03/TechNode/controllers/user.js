@@ -57,3 +57,14 @@ exports.joinRoom = function (join, callback) {
     }
   }, callback)
 }
+
+exports.leaveRoom = function (leave, callback) {
+  db.User.findOneAndUpdate({
+    _id: leave.user._id
+  }, {
+    $set: {
+      online: true,
+      _roomId: null
+    }
+  }, callback)
+}

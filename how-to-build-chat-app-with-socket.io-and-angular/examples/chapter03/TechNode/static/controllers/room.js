@@ -1,33 +1,31 @@
-angular.module('techNodeApp').controller('RoomCtrl', function($scope, $routeParams, socket) {
-  socket.on('rooms.read.' + $routeParams._roomId, function (room) {
+angular.module('techNodeApp').controller('RoomCtrl', function($scope, $routeParams, $scope, socket) {
+  socket.on('rooms.read.' + $routeParams._roomId, function(room) {
     $scope.room = room
   })
   socket.emit('rooms.read', {
     _roomId: $routeParams._roomId
   })
-  socket.on('messages.add', function (message) {
+  socket.on('messages.add', function(message) {
     $scope.room.messages.push(message)
   })
-  socket.on('users.remove', function (user) {
+  socket.on('users.remove', function(user) {
     _userId = user._id
-    $scope.technode.users = $scope.technode.users.filter(function (user) {
+    $scope.room.users = $scope.room.users.filter(function(user) {
       return user._id != _userId
     })
   })
-  // socket.on('technode.read', function (technode) {
-  //   $scope.technode = technode
-  // })
-  // socket.on('messages.add', function (message) {
-  //   $scope.technode.messages.push(message)
-  // })
-  // socket.emit('technode.read')
-  // socket.on('users.add', function (user) {
-  //   $scope.technode.users.push(user)
-  // })
-  // socket.on('users.remove', function (user) {
-  //   _userId = user._id
-  //   $scope.technode.users = $scope.technode.users.filter(function (user) {
-  //     return user._id != _userId
-  //   })
-  // })
+
+  $scope.$on('$routeChangeStart', function() {
+    socket.emit('users.leave', {
+      user: $scope.me,
+      room: $scope.room
+    })
+  })
+
+  socket.on('users.leave', function(leave) {
+    _userId = leave.user._id
+    $scope.room.users = $scope.room.users.filter(function(user) {
+      return user._id != _userId
+    })
+  })
 })
