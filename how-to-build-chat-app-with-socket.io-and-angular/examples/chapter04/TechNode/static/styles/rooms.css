@@ -1,0 +1,50 @@
+.search-room-input {
+  text-align: center;
+  padding: 20px;
+  border-radius: 40px;
+  font-size: 18px;
+  letter-spacing: .5px;
+}
+
+.room-list {
+  margin-top: 30px;
+}
+
+.room-list .room-item {
+  list-style: none;
+  float:left;
+  height: 150px;
+  padding: 15px;
+  width: 25%;
+}
+.room-item .avatar-list {
+  padding: 5px;
+}
+.room-item .avatar-list img {
+  height: 20px;
+}
+
+.room-item .room-content {
+  padding: 10px;
+  height:100%;
+  border-radius: 5px;
+  box-shadow: 0 0 10px #aaa;
+  cursor: pointer;
+  transition: all 218ms;
+}
+.room-item .room-content:hover {
+  -webkit-transform: scale(1.05);
+  box-shadow: 0 0 20px #aaa;
+}
+.room-content h3 {
+  margin:5px;
+}
+
+.no-room {
+  text-align:center;
+  margin: 200px;
+}
+
+.no-room-label {
+  font-size: 18px;
+}

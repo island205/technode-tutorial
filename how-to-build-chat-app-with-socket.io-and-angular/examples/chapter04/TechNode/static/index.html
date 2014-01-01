@@ -1,0 +1,56 @@
+<!doctype html>
+<html ng-app="techNodeApp">
+  <head>
+    <meta charset="UTF-8">
+    <title>TechNode</title>
+    <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/login.css">
+    <link rel="stylesheet" href="/styles/rooms.css">
+    <link rel="stylesheet" href="/styles/room.css">
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/components/angular/angular.js"></script>
+    <script type="text/javascript" src="/components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="/components/moment/moment.js"></script>
+    <script type="text/javascript" src="/components/angular-moment/angular-moment.js"></script>
+    <script type="text/javascript" src="/components/moment/lang/zh-cn.js"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-inverse technode-nav navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">TechNode</a>
+        </div>
+        <nav class="collapse navbar-collapse" role="navigation">
+          <ul class="nav navbar-nav" ng-show="me">
+            <li ng-class="{active:true}">
+              <a href="/rooms">房间列表</a>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right" ng-show="me">
+            <li>
+              <img src="{{me.avatarUrl}}" title="{{me.name}}" class="img-rounded"/>
+            </li>
+            <li>
+              <a href="" ng-click="logout()">登出</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="container" style="margin-top:100px;">
+      <div class="row" ng-view>
+    </div>
+    <script type="text/javascript" src="/technode.js"></script>
+    <script type="text/javascript" src="/services/socket.js"></script>
+    <script type="text/javascript" src="/router.js"></script>
+    <script type="text/javascript" src="/directives/auto-scroll-to-bottom.js"></script>
+    <script type="text/javascript" src="/directives/ctrl-enter-break-line.js"></script>
+    <script type="text/javascript" src="/controllers/login.js"></script>
+    <script type="text/javascript" src="/controllers/rooms.js"></script>
+    <script type="text/javascript" src="/controllers/room.js"></script>
+    <script type="text/javascript" src="/controllers/message-creator.js"></script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+.room .messages {
+    height: 400px;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+}
+
+.room .message-creator {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.room .message img {
+  height: 18px;
+  margin-right: 0.5em;
+}
+.room .message time {
+  color: #aaa;
+  margin-left: 1em;
+}
+.user-list .user img {
+  height: 18px;
+  margin-right: 0.5em;
+}
