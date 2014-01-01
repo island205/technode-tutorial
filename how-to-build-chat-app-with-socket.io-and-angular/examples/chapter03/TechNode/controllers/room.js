@@ -33,7 +33,6 @@ exports.read = function(callback) {
 }
 
 exports.getById = function(_roomId, callback) {
-  debugger
   db.Room.findOne({
     _id: _roomId
   }, function(err, room) {
