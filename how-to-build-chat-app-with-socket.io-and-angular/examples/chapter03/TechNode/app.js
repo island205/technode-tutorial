@@ -63,7 +63,7 @@ app.post('/ajax/login', function(req, res) {
       }
     })
   } else {
-    res.josn(403)
+    res.json(403)
   }
 })
 
