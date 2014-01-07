@@ -2,6 +2,7 @@ var express = require('express')
 var app = express()
 var port = process.env.PORT || 3000
 var httpApi = require('./services/httpApi')
+var socketApi = require('./services/socketApi')
 
 app.use(express.bodyParser())
 
@@ -14,4 +15,9 @@ app.use(function(req, res) {
 })
 
 var io = require('socket.io').listen(app.listen(port))
+
+io.sockets.on('connection', function (socket) {
+  socketApi(socket, io)
+})
+
 console.log("TechNode  is on port " + port + '!')

@@ -1,5 +1,5 @@
 angular.module('techNodeApp').factory('socket', function($rootScope) {
-  var socket = io.connect('/')
+  var socket = window.socket = io.connect('/')
   return {
     on: function(eventName, callback) {
       socket.on(eventName, function() {

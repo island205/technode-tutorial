@@ -1,6 +1,7 @@
 var Controllers = require('../controllers')
 
-module.exports = function(req, res, next) {
+module.exports = function(req, res) {
+  console.log(req, res)
   if (Controllers.hasOwnProperty(req.route.params.model)) {
     model = req.route.params.model
     controller = Controllers[model]
