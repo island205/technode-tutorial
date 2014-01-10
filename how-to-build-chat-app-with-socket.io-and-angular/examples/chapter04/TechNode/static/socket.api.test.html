@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>TechNode Socket API Test</title>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+    function randomString(length) {
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
+
+        if (!length) {
+            length = Math.floor(Math.random() * chars.length);
+        }
+
+        var str = '';
+        for (var i = 0; i < length; i++) {
+            str += chars[Math.floor(Math.random() * chars.length)];
+        }
+        return str;
+    }
+    var socket = window.socket = io.connect('/')
+
+    console.log('get users')
+    var requestId = randomString(16) + '.' + Date.now()
+    socket.once('technode.' + requestId, function (data) {
+      console.log(data)
+    })
+    socket.emit('technode', {
+        method: 'get',
+        model: 'users',
+        requestId: requestId
+    })
+
+    console.log('get users/52ada6527bee2b6a35000001')
+    var requestId = randomString(16) + '.' + Date.now()
+    socket.once('technode.' + requestId, function (data) {
+      console.log(data)
+    })
+    socket.emit('technode', {
+        method: 'get',
+        model: 'users',
+        requestId: requestId,
+        _id: '52ada6527bee2b6a35000001'
+    })
+
+    console.log('add user')
+    var requestId = randomString(16) + '.' + Date.now()
+    socket.once('technode.' + requestId, function (data) {
+      console.log(data)
+
+      console.log('update user')
+      var requestId = randomString(16) + '.' + Date.now()
+      socket.once('technode.' + requestId, function (data) {
+        console.log(data)
+        
+        console.log('delete user')
+        var requestId = randomString(16) + '.' + Date.now()
+        socket.once('technode.' + requestId, function (data) {
+          console.log(data)
+        })
+        socket.emit('technode', {
+            method: 'delete',
+            model: 'users',
+            requestId: requestId,
+            _id: data.data._id
+        })
+      })
+      socket.emit('technode', {
+          method: 'put',
+          model: 'users',
+          requestId: requestId,
+          _id: data.data._id,
+          data: {
+            online: true
+          }
+      })
+    })
+    socket.emit('technode', {
+        method: 'post',
+        model: 'users',
+        requestId: requestId,
+        data: {
+          email: 'foo@bar.com'
+        }
+    })
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

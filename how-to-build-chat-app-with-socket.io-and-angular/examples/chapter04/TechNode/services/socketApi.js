@@ -1,19 +1,6 @@
 var Controllers = require('../controllers')
 var httpApi = require('./httpApi')
 
-/*
-{
-  model: 'users'
-  _id: '52b380a837a4f24736000001'
-  action: 'add'
-  data:{}
-}
-*/
-var methodMap = {
-  add: 'post',
-  update: 'put',
-  remove: 'delete'
-}
 module.exports = function(socket, io) {
   socket.on('technode', function (request) {
     console.log(request)
@@ -25,17 +12,33 @@ module.exports = function(socket, io) {
       model: request.model,
       _id: request._id
     }
-    req.route.method = methodMap[request.action]
-    req.body = request.data
-    res.json = function (data) {
-      console.log(data)
-      io.sockets.emit('technode', {
-        model: request.model,
-        _id: request._id || data._id,
-        method: request.action,
-        data: data
-      })
+
+    req.route.method = request.method
+
+    if (request.method === 'get') {
+      req.query = request.data
+    } else {
+      req.body = request.data
     }
+
+    res.json = function (data) {
+      if (request.method === 'get') {
+        socket.emit('technode.' + request.requestId, {
+          model: request.model,
+          _id: request._id || data._id,
+          method: request.method,
+          data: data
+        })
+      } else {
+        io.sockets.emit('technode', {
+          model: request.model,
+          _id: request._id || data._id,
+          method: request.method,
+          data: data
+        })
+      }
+    }
+
     res.send = function (code, data) {
       console.log(data)
       socket.emit('technode', {
@@ -44,6 +47,8 @@ module.exports = function(socket, io) {
         request: request
       })
     }
+
     httpApi(req, res)
+
   })
 }
