@@ -1,6 +1,15 @@
 var Controllers = require('../controllers')
 var httpApi = require('./httpApi')
 
+/*
+{
+  model,
+  _id,
+  method,
+  data
+}
+*/
+
 module.exports = function(socket, io) {
   socket.on('technode', function (request) {
     console.log(request)

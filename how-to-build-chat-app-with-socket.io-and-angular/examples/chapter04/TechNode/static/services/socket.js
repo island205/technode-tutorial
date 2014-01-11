@@ -18,6 +18,14 @@ angular.module('techNodeApp').factory('socket', function($rootScope) {
           }
         })
       })
+    },
+    once: function (eventName, callback) {
+      socket.once(eventName, function () {
+        var args = arguments
+        $rootScope.$apply(function() {
+          callback.apply(socket, args)
+        })
+      })
     }
   }
 })
