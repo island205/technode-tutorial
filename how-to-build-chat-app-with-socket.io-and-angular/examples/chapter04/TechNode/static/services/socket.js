@@ -1,5 +1,5 @@
 angular.module('techNodeApp').factory('socket', function($rootScope) {
-  var socket = window.socket = io.connect('/')
+  var socket = io.connect('/')
   return {
     on: function(eventName, callback) {
       socket.on(eventName, function() {
@@ -16,14 +16,6 @@ angular.module('techNodeApp').factory('socket', function($rootScope) {
           if (callback) {
             callback.apply(socket, args)
           }
-        })
-      })
-    },
-    once: function (eventName, callback) {
-      socket.once(eventName, function () {
-        var args = arguments
-        $rootScope.$apply(function() {
-          callback.apply(socket, args)
         })
       })
     }

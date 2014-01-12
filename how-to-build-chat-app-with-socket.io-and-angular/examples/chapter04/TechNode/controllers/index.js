@@ -1,3 +1,3 @@
-exports.users = require('./user')
-exports.messages = require('./message')
-exports.rooms = require('./room')
+exports.User = require('./user')
+exports.Message = require('./message')
+exports.Room = require('./room')
