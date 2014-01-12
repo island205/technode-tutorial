@@ -12,12 +12,18 @@ exports.connect = function(socket) {
     } else {
       if (user._roomId) {
         socket.join(user._roomId)
-        socket['in'](user._roomId).broadcast.emit('users.join', user)
-        socket['in'](user._roomId).broadcast.emit('messages.add', {
-          content: user.name + '进入了聊天室',
-          creator: config.robot,
-          createAt: new Date(),
-          _id: ObjectId()
+        socket['in'](user._roomId).broadcast.emit('technode', {
+          action: 'joinRoom',
+          data: user
+        })
+        socket['in'](user._roomId).broadcast.emit('technode', {
+          action: 'createMessage',
+          data: {
+            content: user.name + '进入了聊天室',
+            creator: config.robot,
+            createAt: new Date(),
+            _id: ObjectId()
+          }
         })
       }
     }
@@ -33,12 +39,18 @@ exports.disconnect = function(socket) {
       })
     } else {
       if (user._roomId) {
-        socket['in'](user._roomId).broadcast.emit('users.leave', user)
-        socket['in'](user._roomId).broadcast.emit('messages.add', {
-          content: user.name + '离开了聊天室',
-          creator: config.robot,
-          createAt: new Date(),
-          _id: ObjectId()
+        socket['in'](user._roomId).broadcast.emit('technode', {
+          action: 'leaveRoom',
+          data: user
+        })
+        socket['in'](user._roomId).broadcast.emit('technode', {
+          action: 'createMessage',
+          data: {
+            content: user.name + '离开了聊天室',
+            creator: config.robot,
+            createAt: new Date(),
+            _id: ObjectId()
+          }
         })
         Controllers.User.leaveRoom({
           user: user
@@ -56,8 +68,14 @@ exports.createMessage = function(message, socket) {
         msg: err
       })
     } else {
-      socket['in'](message._roomId).broadcast.emit('messages.add', message)
-      socket.emit('messages.add', message)
+      socket['in'](message._roomId).broadcast.emit('technode', {
+        action: 'createMessage',
+        data: message
+      })
+      socket.emit('technode', {
+        action: 'createMessage',
+        data: message
+      })
     }
   })
 }
@@ -70,7 +88,10 @@ exports.createRoom = function(room, socket, io) {
     } else {
       room = room.toObject()
       room.users = []
-      io.sockets.emit('rooms.add', room)
+      io.sockets.emit('technode', {
+        action: 'createRoom',
+        data: room
+      })
     }
   })
 }
@@ -82,7 +103,11 @@ exports.getRoom = function(data, socket) {
           msg: err
         })
       } else {
-        socket.emit('rooms.read.' + data._roomId, room)
+        socket.emit('technode', {
+          action: 'getRoom',
+          _roomId: _roomId,
+          data: room
+        })
       }
     })
   } else {
@@ -92,7 +117,10 @@ exports.getRoom = function(data, socket) {
           msg: err
         })
       } else {
-        socket.emit('rooms.read', rooms)
+        socket.emit('technode', {
+          action: 'getRoom',
+          data: rooms
+        })
       }
     })
   }
@@ -105,14 +133,23 @@ exports.joinRoom = function(join, socket) {
       })
     } else {
       socket.join(join.room._id)
-      socket.emit('users.join.' + join.user._id, join)
-      socket['in'](join.room._id).broadcast.emit('messages.add', {
-        content: join.user.name + '进入了聊天室',
-        creator: config.robot,
-        createAt: new Date(),
-        _id: ObjectId()
+      socket.emit('technode', {
+        action: 'joinRoom',
+        data: join
       })
-      socket['in'](join.room._id).broadcast.emit('users.join', join)
+      socket['in'](join.room._id).broadcast.emit('technode', {
+        action: 'createMessage',
+        data: {
+          content: join.user.name + '进入了聊天室',
+          creator: config.robot,
+          createAt: new Date(),
+          _id: ObjectId()
+        }
+      })
+      socket['in'](join.room._id).broadcast.emit('technode', {
+        action: 'joinRoom',
+        data: join
+      })
     }
   })
 }
@@ -123,13 +160,19 @@ exports.leaveRoom = function(leave, socket) {
         msg: err
       })
     } else {
-      socket['in'](leave.room._id).broadcast.emit('messages.add', {
-        content: leave.user.name + '离开了聊天室',
-        creator: config.robot,
-        createAt: new Date(),
-        _id: ObjectId()
+      socket['in'](leave.room._id).broadcast.emit('technode', {
+        action: 'createMessage',
+        data: {
+          content: leave.user.name + '离开了聊天室',
+          creator: config.robot,
+          createAt: new Date(),
+          _id: ObjectId()
+        }
       })
-      socket['in'](leave.room._id).broadcast.emit('users.leave', leave)
+      socket['in'](leave.room._id).broadcast.emit('technode', {
+        action: 'leaveRoom',
+        data: leave
+      })
       socket.leave(leave.room._id)
     }
   })
