@@ -1,27 +1,21 @@
 angular.module('techNodeApp', ['ngRoute', 'angularMoment'])
-  .run(function ($window, $http, $rootScope, $location) {
+  .run(function($window, $rootScope, $location, server) {
+
     $window.moment.lang('zh-cn')
-    $http({
-      url: '/api/validate',
-      method: 'GET'
-    }).success(function (user) {
-      $rootScope.me = user
-      if ($location.path() == '/login') {
+
+    $rootScope.me = server.getUser()
+
+    server.validate().then(function() {
+      if ($location.path() === '/login') {
         $location.path('/rooms')
       }
-    }).error(function (data) {
+    }, function() {
       $location.path('/login')
     })
+
     $rootScope.logout = function() {
-      $http({
-        url: '/api/logout',
-        method: 'GET'
-      }).success(function () {
-        delete $rootScope.me
+      server.logout().then(function () {
         $location.path('/login')
       })
     }
-    $rootScope.$on('login', function (evt, me) {
-      $rootScope.me = me
-    })
   })

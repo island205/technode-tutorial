@@ -116,7 +116,7 @@ exports.joinRoom = function(join, socket) {
     }
   })
 }
-exports.leaveRoom = function(leave, socket, io) {
+exports.leaveRoom = function(leave, socket) {
   Controllers.User.leaveRoom(leave, function(err) {
     if (err) {
       socket.emit('err', {

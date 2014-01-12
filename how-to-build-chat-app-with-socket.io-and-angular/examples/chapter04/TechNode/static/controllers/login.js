@@ -1,15 +1,8 @@
-angular.module('techNodeApp').controller('LoginCtrl', function($scope, $http, $location) {
+angular.module('techNodeApp').controller('LoginCtrl', function($scope, $location, server) {
   $scope.login = function () {
-    $http({
-      url: '/api/login',
-      method: 'POST',
-      data: {
-        email: $scope.email
-      }
-    }).success(function (user) {
-      $scope.$emit('login', user)
+    server.login($scope.email).then(function () {
       $location.path('/rooms')
-    }).error(function (data) {
+    }, function () {
       $location.path('/login')
     })
   }

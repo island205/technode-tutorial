@@ -10,52 +10,16 @@ angular.module('techNodeApp').controller('RoomsCtrl', function($scope, $location
 
   }
   $scope.createRoom = function() {
-    socket.emit('technode', {
-      action: 'createRoom',
-      data: {
-        name: $scope.searchKey
-      }
+    server.createRoom({
+      name: $scope.searchKey
     })
   }
-  socket.on('users.join.' + $scope.me._id, function(join) {
-    $location.path('/rooms/' + join.room._id)
-  })
   $scope.enterRoom = function(room) {
-    socket.emit('technode', {
-      action: 'joinRoom',
-      data: {
-        user: $scope.me,
-        room: room
-      }
+    server.joinRoom({
+      user: $scope.me,
+      room: room
     })
   }
-  socket.on('rooms.read', function(rooms) {
-    $scope.filteredRooms = $scope.rooms = rooms
-  })
-  socket.on('rooms.add', function(room) {
-    $scope.rooms.push(room)
-    $scope.searchRoom()
-  })
-  socket.on('users.join', function(join) {
-    $scope.rooms.forEach(function(room) {
-      if (room._id == join.room._id) {
-        room.users.push(join.user)
-      }
-    })
-  })
-  socket.on('users.leave', function(leave) {
-    _userId = leave.user._id
-    if ($scope.rooms) {
-      $scope.rooms.forEach(function(room) {
-        if (room._id == leave.room._id) {
-          room.users = room.users.filter(function(user) {
-            return user._id != leave.user._id
-          })
-        }
-      })
-    }
-  })
-  socket.emit('technode', {
-    action: 'getRoom'
-  })
+
+  $scope.filteredRooms = $scope.rooms = server.getRooms()
 })

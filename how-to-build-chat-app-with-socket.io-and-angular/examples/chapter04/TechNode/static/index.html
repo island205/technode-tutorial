@@ -29,7 +29,7 @@
               <a href="/rooms">房间列表</a>
             </li>
           </ul>
-          <ul class="nav navbar-nav navbar-right" ng-show="me">
+          <ul class="nav navbar-nav navbar-right" ng-show="me._id">
             <li>
               <img src="{{me.avatarUrl}}" title="{{me.name}}" class="img-rounded"/>
             </li>
@@ -45,6 +45,7 @@
     </div>
     <script type="text/javascript" src="/technode.js"></script>
     <script type="text/javascript" src="/services/socket.js"></script>
+    <script type="text/javascript" src="/services/server.js"></script>
     <script type="text/javascript" src="/router.js"></script>
     <script type="text/javascript" src="/directives/auto-scroll-to-bottom.js"></script>
     <script type="text/javascript" src="/directives/ctrl-enter-break-line.js"></script>
