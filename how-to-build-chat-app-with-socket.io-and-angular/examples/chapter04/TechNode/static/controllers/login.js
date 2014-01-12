@@ -1,7 +1,7 @@
 angular.module('techNodeApp').controller('LoginCtrl', function($scope, $http, $location) {
   $scope.login = function () {
     $http({
-      url: '/ajax/login',
+      url: '/api/login',
       method: 'POST',
       data: {
         email: $scope.email

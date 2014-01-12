@@ -2,8 +2,11 @@ angular.module('techNodeApp').controller('RoomCtrl', function($scope, $routePara
   socket.on('rooms.read.' + $routeParams._roomId, function(room) {
     $scope.room = room
   })
-  socket.emit('rooms.read', {
-    _roomId: $routeParams._roomId
+  socket.emit('technode', {
+    action: 'getRoom',
+    data: {
+      _roomId: $routeParams._roomId
+    }
   })
   socket.on('messages.add', function(message) {
     $scope.room.messages.push(message)

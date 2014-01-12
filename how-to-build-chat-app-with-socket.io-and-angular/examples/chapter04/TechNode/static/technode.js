@@ -2,7 +2,7 @@ angular.module('techNodeApp', ['ngRoute', 'angularMoment'])
   .run(function ($window, $http, $rootScope, $location) {
     $window.moment.lang('zh-cn')
     $http({
-      url: '/ajax/validate',
+      url: '/api/validate',
       method: 'GET'
     }).success(function (user) {
       $rootScope.me = user
@@ -14,7 +14,7 @@ angular.module('techNodeApp', ['ngRoute', 'angularMoment'])
     })
     $rootScope.logout = function() {
       $http({
-        url: '/ajax/logout',
+        url: '/api/logout',
         method: 'GET'
       }).success(function () {
         delete $rootScope.me
