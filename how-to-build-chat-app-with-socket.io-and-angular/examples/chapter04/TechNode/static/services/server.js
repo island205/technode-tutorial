@@ -1,23 +1,26 @@
 angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $http, socket) {
-  cache = $cacheFactory('technode')
-  socket.on('technode', function (data) {
+  var cache = window.cache = $cacheFactory('technode')
+  socket.on('technode', function(data) {
     switch (data.action) {
       case 'getRoom':
         if (data._roomId) {
           angular.extend(cache.get(data._roomId), data.data)
         } else {
-          cache.get('rooms').concat(data.data)        }
+          data.data.forEach(function (room) {
+            cache.get('rooms').push(room)
+          })
+        }
         break
       case 'leaveRoom':
         var leave = data.data
         var _userId = leave.user._id
         var _roomId = leave.room._id
-        cache.get(_roomId).users = cache.get(_roomId).users.filter(function (user) {
+        cache.get(_roomId).users = cache.get(_roomId).users.filter(function(user) {
           return user._id != _userId
         })
-        cache.get('rooms').forEach(function (room) {
+        cache.get('rooms').forEach(function(room) {
           if (room._id === _roomId) {
-            room.users = room.users.filter(function (user) {
+            room.users = room.users.filter(function(user) {
               return user._id !== _userId
             })
           }
@@ -30,38 +33,35 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
         var join = data.data
         var _userId = join.user._id
         var _roomId = join.room._id
-        cache.get(_roomId).users.concat(join.user)
-        cache.get('rooms').forEach(function (room) {
-          if (room._id === _roomId) {
-            room.users.concat(join.user)
-          }
-        })
+        if (!cache.get(_roomId)) {
+          cache.get('rooms').forEach(function (room) {
+            if (room._id === _roomId) {
+              cache.put(_roomId, room)
+            }
+          })
+        }
+        cache.get(_roomId).users.push(join.user)
         break
-      cache 'createMessage':
+      case 'createMessage':
         var message = data.data
-        cache.get(_roomId) && cache.get(_roomId).messages.concat(message)
-        cache.get('rooms').forEach(function (room) {
-          if (room._id === message._roomId) {
-            room.messages.concat(message)
-          }
-        })
+        cache.get(message._roomId).messages.push(message)
     }
   })
   return {
-    validate: function () {
+    validate: function() {
       var deferred = $q.defer()
       $http({
         url: '/api/validate',
         method: 'GET'
-      }).success(function (user) {
+      }).success(function(user) {
         angular.extend(cache.get('user'), user)
         deferred.resolve()
-      }).error(function (data) {
+      }).error(function(data) {
         deferred.reject()
       })
       return deferred.promise
     },
-    login: function (email) {
+    login: function(email) {
       var deferred = $q.defer()
       $http({
         url: '/api/login',
@@ -69,15 +69,15 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
         data: {
           email: email
         }
-      }).success(function (user) {
+      }).success(function(user) {
         angular.extend(cache.get('user'), user)
         deferred.resolve()
-      }).error(function () {
+      }).error(function() {
         deferred.reject()
       })
       return deferred.promise
     },
-    logout: function () {
+    logout: function() {
       var deferred = $q.defer()
       $http({
         url: '/api/logout',
@@ -93,13 +93,13 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
       })
       return deferred.promise
     },
-    getUser: function () {
+    getUser: function() {
       if (!cache.get('user')) {
         cache.put('user', {})
       }
       return cache.get('user')
     },
-    getRoom: function (_roomId) {
+    getRoom: function(_roomId) {
       if (!cache.get(_roomId)) {
         cache.put(_roomId, {
           users: [],
@@ -114,7 +114,7 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
       }
       return cache.get(_roomId)
     },
-    getRooms: function () {
+    getRooms: function() {
       if (!cache.get('rooms')) {
         cache.put('rooms', [])
         socket.emit('technode', {
@@ -123,27 +123,27 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
       }
       return cache.get('rooms')
     },
-    joinRoom: function (join) {
+    joinRoom: function(join) {
       socket.emit('technode', {
         action: 'joinRoom',
         data: join
       })
     },
-    leaveRoom: function (leave) {
+    leaveRoom: function(leave) {
       socket.emit('technode', {
         action: 'leaveRoom',
         data: leave
       })
     },
-    createRoom: function (room) {
+    createRoom: function(room) {
       socket.emit('technode', {
         action: 'createRoom',
         data: room
       })
     },
-    createMessage: function (message) {
+    createMessage: function(message) {
       socket.emit('technode', {
-        action： 'createMessage',
+        action: 'createMessage',
         data: message
       })
     }

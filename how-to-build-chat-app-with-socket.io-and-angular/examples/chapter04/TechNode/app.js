@@ -46,11 +46,7 @@ io.set('authorization', function(handshakeData, accept) {
         accept(error.message, false)
       } else {
         handshakeData.session = session
-        if (session._userId) {
-          accept(null, true)
-        } else {
-          accept('No login')
-        }
+        accept(null, true)
       }
     })
   } else {

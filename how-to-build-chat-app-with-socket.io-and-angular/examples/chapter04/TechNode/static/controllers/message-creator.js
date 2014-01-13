@@ -1,13 +1,13 @@
-angular.module('techNodeApp').controller('MessageCreatorCtrl', function($scope, socket) {
+angular.module('techNodeApp').controller('MessageCreatorCtrl', function($scope, server) {
   $scope.createMessage = function() {
-
-    $scope.newMessage = ''
 
     server.createMessage({
       content: $scope.newMessage,
       creator: $scope.me,
       _roomId: $scope.room._id
     })
+
+    $scope.newMessage = ''
 
   }
 })

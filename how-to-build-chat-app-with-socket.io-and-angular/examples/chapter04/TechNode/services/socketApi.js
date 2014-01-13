@@ -4,61 +4,67 @@ var config = require('../config')
 
 exports.connect = function(socket) {
   var _userId = socket.handshake.session._userId
-  Controllers.User.online(_userId, function(err, user) {
-    if (err) {
-      socket.emit('err', {
-        mesg: err
-      })
-    } else {
-      if (user._roomId) {
-        socket.join(user._roomId)
-        socket['in'](user._roomId).broadcast.emit('technode', {
-          action: 'joinRoom',
-          data: user
+  if (_userId) {
+    Controllers.User.online(_userId, function(err, user) {
+      if (err) {
+        socket.emit('err', {
+          mesg: err
         })
-        socket['in'](user._roomId).broadcast.emit('technode', {
-          action: 'createMessage',
-          data: {
-            content: user.name + '进入了聊天室',
-            creator: config.robot,
-            createAt: new Date(),
-            _id: ObjectId()
-          }
-        })
+      } else {
+        if (user._roomId) {
+          socket.join(user._roomId)
+          socket['in'](user._roomId).broadcast.emit('technode', {
+            action: 'joinRoom',
+            data: user
+          })
+          socket['in'](user._roomId).broadcast.emit('technode', {
+            action: 'createMessage',
+            data: {
+              content: user.name + '进入了聊天室',
+              creator: config.robot,
+              createAt: new Date(),
+              _roomId: user._roomId,
+              _id: ObjectId()
+            }
+          })
+        }
       }
-    }
-  })
+    })
+  }
 }
 
 exports.disconnect = function(socket) {
   var _userId = socket.handshake.session._userId
-  Controllers.User.offline(_userId, function(err, user) {
-    if (err) {
-      socket.emit('err', {
-        mesg: err
-      })
-    } else {
-      if (user._roomId) {
-        socket['in'](user._roomId).broadcast.emit('technode', {
-          action: 'leaveRoom',
-          data: user
+  if (_userId) {
+    Controllers.User.offline(_userId, function(err, user) {
+      if (err) {
+        socket.emit('err', {
+          mesg: err
         })
-        socket['in'](user._roomId).broadcast.emit('technode', {
-          action: 'createMessage',
-          data: {
-            content: user.name + '离开了聊天室',
-            creator: config.robot,
-            createAt: new Date(),
-            _id: ObjectId()
-          }
-        })
-        Controllers.User.leaveRoom({
-          user: user
-        }, function() {})
-      }
+      } else {
+        if (user._roomId) {
+          socket['in'](user._roomId).broadcast.emit('technode', {
+            action: 'leaveRoom',
+            data: user
+          })
+          socket['in'](user._roomId).broadcast.emit('technode', {
+            action: 'createMessage',
+            data: {
+              content: user.name + '离开了聊天室',
+              creator: config.robot,
+              createAt: new Date(),
+              _roomId: user._roomId,
+              _id: ObjectId()
+            }
+          })
+          Controllers.User.leaveRoom({
+            user: user
+          }, function() {})
+        }
 
-    }
-  })
+      }
+    })
+  }
 }
 
 exports.createMessage = function(message, socket) {
@@ -105,7 +111,7 @@ exports.getRoom = function(data, socket) {
       } else {
         socket.emit('technode', {
           action: 'getRoom',
-          _roomId: _roomId,
+          _roomId: data._roomId,
           data: room
         })
       }
@@ -143,6 +149,7 @@ exports.joinRoom = function(join, socket) {
           content: join.user.name + '进入了聊天室',
           creator: config.robot,
           createAt: new Date(),
+          _roomId: join.room._id,
           _id: ObjectId()
         }
       })
@@ -166,6 +173,7 @@ exports.leaveRoom = function(leave, socket) {
           content: leave.user.name + '离开了聊天室',
           creator: config.robot,
           createAt: new Date(),
+          _roomId: leave.room._id,
           _id: ObjectId()
         }
       })
