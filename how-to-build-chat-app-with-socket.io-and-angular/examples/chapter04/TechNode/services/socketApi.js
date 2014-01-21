@@ -181,6 +181,10 @@ exports.leaveRoom = function(leave, socket) {
         action: 'leaveRoom',
         data: leave
       })
+      socket.emit('technode', {
+        action: 'leaveRoom',
+        data: leave
+      })
       socket.leave(leave.room._id)
     }
   })
