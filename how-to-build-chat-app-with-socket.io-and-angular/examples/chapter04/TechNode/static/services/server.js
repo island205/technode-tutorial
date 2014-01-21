@@ -18,7 +18,7 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
         cache.get(_roomId).users = cache.get(_roomId).users.filter(function(user) {
           return user._id != _userId
         })
-        cache.get('rooms').forEach(function(room) {
+        cache.get('rooms') && cache.get('rooms').forEach(function(room) {
           if (room._id === _roomId) {
             room.users = room.users.filter(function(user) {
               return user._id !== _userId
@@ -27,12 +27,12 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
         })
         break
       case 'createRoom':
-        cache.get('rooms').concat(data.data)
+        cache.get('rooms').push(data.data)
         break
       case 'joinRoom':
         var join = data.data
         var _userId = join.user._id
-        var _roomId = join.room._id
+        var _roomId = join.user._roomId
         if (!cache.get(_roomId)) {
           cache.get('rooms').forEach(function (room) {
             if (room._id === _roomId) {
@@ -45,7 +45,11 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
       case 'createMessage':
         var message = data.data
         cache.get(message._roomId).messages.push(message)
+        break
     }
+  })
+  socket.on('err', function (data) {
+    console.log(data)
   })
   return {
     validate: function() {

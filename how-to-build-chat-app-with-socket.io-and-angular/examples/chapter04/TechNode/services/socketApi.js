@@ -8,14 +8,22 @@ exports.connect = function(socket) {
     Controllers.User.online(_userId, function(err, user) {
       if (err) {
         socket.emit('err', {
-          mesg: err
+          msg: err
         })
       } else {
         if (user._roomId) {
           socket.join(user._roomId)
           socket['in'](user._roomId).broadcast.emit('technode', {
             action: 'joinRoom',
-            data: user
+            data: {
+              user: user
+            }
+          })
+          socket.emit('technode', {
+            action: 'joinRoom',
+            data: {
+              user: user
+            }
           })
           socket['in'](user._roomId).broadcast.emit('technode', {
             action: 'createMessage',
@@ -45,7 +53,12 @@ exports.disconnect = function(socket) {
         if (user._roomId) {
           socket['in'](user._roomId).broadcast.emit('technode', {
             action: 'leaveRoom',
-            data: user
+            data: {
+              user: user,
+              room: {
+                _id: user._roomIds
+              }
+            }
           })
           socket['in'](user._roomId).broadcast.emit('technode', {
             action: 'createMessage',
@@ -132,28 +145,29 @@ exports.getRoom = function(data, socket) {
   }
 }
 exports.joinRoom = function(join, socket) {
-  Controllers.User.joinRoom(join, function(err) {
+  Controllers.User.joinRoom(join, function(err, user) {
     if (err) {
       socket.emit('err', {
         msg: err
       })
     } else {
-      socket.join(join.room._id)
+      join.user = user
+      socket.join(join.user._roomId)
       socket.emit('technode', {
         action: 'joinRoom',
         data: join
       })
-      socket['in'](join.room._id).broadcast.emit('technode', {
+      socket['in'](join.user._roomId).broadcast.emit('technode', {
         action: 'createMessage',
         data: {
           content: join.user.name + '进入了聊天室',
           creator: config.robot,
           createAt: new Date(),
-          _roomId: join.room._id,
+          _roomId: join.user._roomId,
           _id: ObjectId()
         }
       })
-      socket['in'](join.room._id).broadcast.emit('technode', {
+      socket['in'](join.user._roomId).broadcast.emit('technode', {
         action: 'joinRoom',
         data: join
       })

@@ -13,18 +13,40 @@ exports.read = function(callback) {
       var roomsData = []
       async.each(rooms, function(room, done) {
         var roomData = room.toObject()
-        db.User.find({
-          _roomId: roomData._id,
-          online: true
-        }, function(err, users) {
-          if (err) {
-            done(err)
-          } else {
-            roomData.users = users
-            roomsData.push(roomData)
-            done()
-          }
-        })
+        async.parallel([
+
+            function(done) {
+              db.User.find({
+                _roomId: roomData._id,
+                online: true
+              }, function(err, users) {
+                done(err, users)
+              })
+            },
+            function(done) {
+              db.Message.find({
+                _roomId: roomData._id
+              }, null, {
+                sort: {
+                  'create_at': -1
+                },
+                limit: 20
+              }, function(err, messages) {
+                done(err, messages.reverse())
+              })
+            }
+          ],
+          function(err, results) {
+            if (err) {
+              done(err)
+            } else {
+              roomData.users = results[0]
+              roomData.messages = results[1]
+              roomsData.push(roomData)
+              done()
+            }
+          });
+
       }, function(err) {
         callback(err, roomsData)
       })
@@ -71,7 +93,8 @@ exports.getById = function(_roomId, callback) {
             room.messages = results[1]
             callback(null, room)
           }
-        });
+        }
+      );
     }
   })
 }

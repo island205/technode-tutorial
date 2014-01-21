@@ -15,12 +15,12 @@ angular.module('techNodeApp').controller('RoomsCtrl', function($scope, $location
     })
   }
   $scope.enterRoom = function(room) {
-    server.joinRoom({
-      user: $scope.me,
-      room: room
-    })
     $location.path('/rooms/' + room._id)
   }
 
   $scope.filteredRooms = $scope.rooms = server.getRooms()
+
+  $scope.$watchCollection('rooms', function() {
+    $scope.searchRoom()
+  });
 })

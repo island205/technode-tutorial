@@ -35,6 +35,8 @@ app.use(function(req, res) {
 
 var io = require('socket.io').listen(app.listen(port))
 
+io.set('log level', 0)
+
 io.set('authorization', function(handshakeData, accept) {
   handshakeData.cookie = Cookie.parse(handshakeData.headers.cookie)
   var connectSid = handshakeData.cookie['connect.sid']
