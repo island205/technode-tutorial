@@ -23,14 +23,23 @@ app.use(express.session({
   },
   store: sessionStore
 }))
-app.use(express.static(__dirname + '/static'))
+
+app.configure('development', function () {
+  app.set('staticPath', '/static')
+})
+
+app.configure('production', function () {
+  app.set('staticPath', '/build')
+})
+
+app.use(express.static(__dirname + app.get('staticPath')))
 
 app.post('/api/login', api.login)
 app.get('/api/logout', api.logout)
 app.get('/api/validate', api.validate)
 
 app.use(function(req, res) {
-  res.sendfile('./static/index.html')
+  res.sendfile('.' + app.get('staticPath') + '/index.html')
 })
 
 var io = require('socket.io').listen(app.listen(port))

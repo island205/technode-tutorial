@@ -1,4 +1,4 @@
-angular.module('techNodeApp').config(function($routeProvider, $locationProvider) {
+angular.module('techNodeApp').config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
   $routeProvider.
   when('/rooms', {
@@ -16,4 +16,4 @@ angular.module('techNodeApp').config(function($routeProvider, $locationProvider)
   otherwise({
     redirectTo: '/login'
   })
-})
+}])

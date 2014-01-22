@@ -1,6 +1,5 @@
 angular.module('techNodeApp', ['ngRoute', 'angularMoment'])
-  .run(function($window, $rootScope, $location, server) {
-
+  .run(['$window', '$rootScope', '$location', 'server', function($window, $rootScope, $location, server) {
     $window.moment.lang('zh-cn')
 
     $rootScope.me = server.getUser()
@@ -18,4 +17,4 @@ angular.module('techNodeApp', ['ngRoute', 'angularMoment'])
         $location.path('/login')
       })
     }
-  })
+  }])

@@ -1,4 +1,4 @@
-angular.module('techNodeApp').factory('socket', function($rootScope) {
+angular.module('techNodeApp').factory('socket', ['$rootScope', function($rootScope) {
   var socket = io.connect('/')
   return {
     on: function(eventName, callback) {
@@ -20,4 +20,4 @@ angular.module('techNodeApp').factory('socket', function($rootScope) {
       })
     }
   }
-})
+}])

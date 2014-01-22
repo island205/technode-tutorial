@@ -1,4 +1,4 @@
-angular.module('techNodeApp').controller('RoomCtrl', function($scope, $routeParams, $scope, server) {
+angular.module('techNodeApp').controller('RoomCtrl', ['$scope', '$routeParams', '$scope', 'server', function($scope, $routeParams, $scope, server) {
 
   $scope.room = server.getRoom($routeParams._roomId)
 
@@ -15,4 +15,4 @@ angular.module('techNodeApp').controller('RoomCtrl', function($scope, $routePara
       room: $scope.room
     })
   })
-})
+}])
