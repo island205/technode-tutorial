@@ -1,7 +1,9 @@
-angular.module('techNodeApp').controller('LoginCtrl', function($scope, $cookies, socket) {
-  $scope.login = function() {
-    socket.emit('login', {
-      email: $scope.email
+angular.module('techNodeApp').controller('LoginCtrl', function($scope, $location, server) {
+  $scope.login = function () {
+    server.login($scope.email).then(function () {
+      $location.path('/rooms')
+    }, function () {
+      $location.path('/login')
     })
   }
 })

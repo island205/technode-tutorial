@@ -1,9 +1,9 @@
 var mongoose = require('mongoose')
-var Schema = mongoose.Schema,
-  ObjectId = Schema.ObjectId;
+var Schema = mongoose.Schema
 
 var Room = new Schema({
-  name: String
+  name: String,
+  createAt:{type: Date, default: Date.now}
 });
 
 module.exports = Room

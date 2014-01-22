@@ -2,22 +2,16 @@
   "name": "TechNode",
   "version": "0.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:island205/TechNode.git"
   },
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "express": "~3.4.3",
-    "socket.io": "~0.9.16",
-    "gravatar": "~1.0.6",
-    "mongoose": "~3.8.0",
-    "async": "~0.2.9",
-    "underscore": "~1.5.2"
+    "connect": "~2.12.0",
+    "mongoose": "~3.8.2",
+    "cookie": "~0.1.0",
+    "connect-mongo": "~0.4.0"
   }
 }

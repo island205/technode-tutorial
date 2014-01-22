@@ -1,10 +1,18 @@
-angular.module('techNodeApp').controller('RoomCtrl', function($scope, $location, $cookies, $routeParams, socket) {
-  $scope.sendMessage = function() {
-    socket.emit('add:message', {
-      content: $scope.message,
-      creator: $scope.userMe,
-      _roomId: $scope.selectedRoom._id
+angular.module('techNodeApp').controller('RoomCtrl', function($scope, $routeParams, $scope, server) {
+
+  $scope.room = server.getRoom($routeParams._roomId)
+
+	server.joinRoom({
+	  user: $scope.me,
+	  room: {
+	  	_id: $routeParams._roomId
+	  }
+	})
+
+  $scope.$on('$routeChangeStart', function() {
+    server.leaveRoom({
+      user: $scope.me,
+      room: $scope.room
     })
-    $scope.message = ""
-  }
+  })
 })

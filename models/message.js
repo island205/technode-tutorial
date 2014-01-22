@@ -5,12 +5,13 @@ var Schema = mongoose.Schema,
 var Message = new Schema({
   content: String,
   creator: {
+    _id: ObjectId,
     email: String,
     name: String,
-    avatar: String
+    avatarUrl: String
   },
-  create_at:{type: Date, default: Date.now},
-  _roomId: ObjectId
+  _roomId: ObjectId,
+  createAt:{type: Date, default: Date.now}
 })
 
 module.exports = Message

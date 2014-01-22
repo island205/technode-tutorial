@@ -1,13 +1,13 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema,
-  ObjectId = Schema.ObjectId;
+  ObjectId = Schema.ObjectId
 
 var User = new Schema({
   email: String,
   name: String,
-  avatar: String,
+  avatarUrl: String,
   _roomId: ObjectId,
-	online: Boolean
+  online: Boolean
 });
 
 module.exports = User

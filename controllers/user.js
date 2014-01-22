@@ -2,6 +2,36 @@ var db = require('../models')
 var async = require('async')
 var gravatar = require('gravatar')
 
+exports.findUserById = function(_userId, callback) {
+  db.User.findOne({
+    _id: _userId
+  }, callback)
+}
+
+exports.findByEmailOrCreate = function(email, callback) {
+  db.User.findOne({
+    email: email
+  }, function(err, user) {
+    if (user) {
+      callback(null, user)
+    } else {
+      user = new db.User
+      user.name = email.split('@')[0]
+      user.email = email
+      user.avatarUrl = gravatar.url(email)
+      user.save(callback)
+    }
+  })
+}
+exports.online = function(_userId, callback) {
+  db.User.findOneAndUpdate({
+    _id: _userId
+  }, {
+    $set: {
+      online: true
+    }
+  }, callback)
+}
 exports.offline = function(_userId, callback) {
   db.User.findOneAndUpdate({
     _id: _userId
@@ -11,58 +41,30 @@ exports.offline = function(_userId, callback) {
     }
   }, callback)
 }
-
-exports.findByEmail = function(email, callback) {
-  db.User.findOne({
-    email: email
+exports.getOnlineUsers = function(callback) {
+  db.User.find({
+    online: true
   }, callback)
 }
 
-exports.createByEmail = function(email, callback) {
-  var user = new db.User
-  user.avatar = gravatar.url(email)
-  user.name = email.split('@').shift()
-  user.email = email
-  user.save(callback)
-}
-
-exports.online = function(user, _roomId, callback) {
-  user.online = true
-  user._roomId = _roomId
-  user.save(callback)
-}
-
-exports.findByEmailOrCreate = function(email, _roomId, callback) {
-  exports.findByEmail(email, function(err, user) {
-    if (err) {
-      callback(err)
-    } else if (user) {
-      // 如果有用户，上线
-      exports.online(user,  _roomId, function(err, user) {
-        if (err) {
-          callback(err)
-        } else {
-          callback(null, user)
-        }
-      })
-    } else {
-      // 没有该用户，新建用户
-      exports.createByEmail(email, function(err, user) {
-        if (err) {
-          callback(err)
-        } else {
-          exports.online(user, _roomId, callback)
-        }
-      })
-    }
-  })
-}
-exports.enterRoom = function(email, _roomId, callback) {
+exports.joinRoom = function (join, callback) {
   db.User.findOneAndUpdate({
-    email: email
+    _id: join.user._id
   }, {
     $set: {
-      _roomId: _roomId
+      online: true,
+      _roomId: join.room._id
+    }
+  }, callback)
+}
+
+exports.leaveRoom = function (leave, callback) {
+  db.User.findOneAndUpdate({
+    _id: leave.user._id
+  }, {
+    $set: {
+      online: true,
+      _roomId: null
     }
   }, callback)
 }
