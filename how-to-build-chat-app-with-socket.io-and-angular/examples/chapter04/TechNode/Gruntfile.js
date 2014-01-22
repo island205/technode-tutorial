@@ -18,6 +18,23 @@ module.exports = function (grunt) {
           {'build/favicon.ico': 'static/favicon.ico'}
         ]
       }
+    },
+    rev: {
+      options: {
+        encoding: 'utf8',
+        algorithm: 'md5',
+        length: 8
+      },
+      assets: {
+        files: [{
+          src: [
+            'build/**/*.{jpg,jpeg,gif,png,js,css}'
+          ]
+        }]
+      }
+    },
+    clean: {
+      main:['.tmp', 'build']
     }
   })
   grunt.loadNpmTasks('grunt-usemin')
@@ -25,13 +42,17 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-cssmin')
   grunt.loadNpmTasks('grunt-contrib-copy')
+  grunt.loadNpmTasks('grunt-contrib-clean')
+  grunt.loadNpmTasks('grunt-rev')
 
   grunt.registerTask('default', [
+    'clean',
     'copy',
     'useminPrepare',
     'concat',
     'uglify',
     'cssmin',
+    'rev',
     'usemin'
   ])
 }
