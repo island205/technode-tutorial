@@ -1,2 +1,4 @@
 components
+.tmp
+build
 node_modules
