@@ -7,7 +7,8 @@ module.exports = function (grunt) {
       }
     },
     usemin: {
-      html: 'build/index.html'
+      html: 'build/index.html',
+      css: 'build/css/*.css'
     },
     copy: {
       main: {
@@ -28,7 +29,7 @@ module.exports = function (grunt) {
       assets: {
         files: [{
           src: [
-            'build/**/*.{jpg,jpeg,gif,png,js,css}'
+            'build/**/*.{jpg,jpeg,gif,png,js,css,eot,svg,ttf,woff}'
           ]
         }]
       }
