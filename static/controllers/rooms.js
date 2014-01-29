@@ -1,4 +1,4 @@
-angular.module('techNodeApp').controller('RoomsCtrl', function($scope, $location, server) {
+angular.module('techNodeApp').controller('RoomsCtrl', ['$scope', '$location', 'server', function($scope, $location, server) {
   $scope.searchRoom = function() {
     if ($scope.searchKey) {
       $scope.filteredRooms = $scope.rooms.filter(function(room) {
@@ -23,4 +23,4 @@ angular.module('techNodeApp').controller('RoomsCtrl', function($scope, $location
   $scope.$watchCollection('rooms', function() {
     $scope.searchRoom()
   });
-})
+}])

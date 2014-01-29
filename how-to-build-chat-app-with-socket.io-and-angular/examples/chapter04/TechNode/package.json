@@ -25,6 +25,7 @@
     "grunt-contrib-cssmin": "~0.7.0",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-rev": "~0.1.0",
-    "grunt-contrib-clean": "~0.5.0"
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-inline-angular-templates": "~0.1.5"
   }
 }

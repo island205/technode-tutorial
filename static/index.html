@@ -3,19 +3,13 @@
   <head>
     <meta charset="UTF-8">
     <title>TechNode</title>
+    <!-- build:css /css/technode.css -->
     <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/styles/style.css">
     <link rel="stylesheet" href="/styles/login.css">
     <link rel="stylesheet" href="/styles/rooms.css">
     <link rel="stylesheet" href="/styles/room.css">
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/components/jquery/jquery.js"></script>
-    <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/components/angular/angular.js"></script>
-    <script type="text/javascript" src="/components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="/components/moment/moment.js"></script>
-    <script type="text/javascript" src="/components/angular-moment/angular-moment.js"></script>
-    <script type="text/javascript" src="/components/moment/lang/zh-cn.js"></script>
+    <!-- endbuild -->
   </head>
   <body>
     <div class="navbar navbar-inverse technode-nav navbar-fixed-top">
@@ -43,6 +37,15 @@
     <div class="container" style="margin-top:100px;">
       <div class="row" ng-view>
     </div>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <!-- build:js /script/technode.js -->
+    <script type="text/javascript" src="/components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/components/angular/angular.js"></script>
+    <script type="text/javascript" src="/components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="/components/moment/moment.js"></script>
+    <script type="text/javascript" src="/components/angular-moment/angular-moment.js"></script>
+    <script type="text/javascript" src="/components/moment/lang/zh-cn.js"></script>
     <script type="text/javascript" src="/technode.js"></script>
     <script type="text/javascript" src="/services/socket.js"></script>
     <script type="text/javascript" src="/services/server.js"></script>
@@ -53,5 +56,6 @@
     <script type="text/javascript" src="/controllers/rooms.js"></script>
     <script type="text/javascript" src="/controllers/room.js"></script>
     <script type="text/javascript" src="/controllers/message-creator.js"></script>
+    <!-- endbuild -->
   </body>
 </html>

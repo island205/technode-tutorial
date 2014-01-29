@@ -1,4 +1,4 @@
-angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $http, socket) {
+angular.module('techNodeApp').factory('server', ['$cacheFactory', '$q', '$http', 'socket', function($cacheFactory, $q, $http, socket) {
   var cache = window.cache = $cacheFactory('technode')
   socket.on('technode', function(data) {
     switch (data.action) {
@@ -58,7 +58,7 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
         url: '/api/validate',
         method: 'GET'
       }).success(function(user) {
-        angular.extend(cache.get('user'), user)
+        angular.extend(this.getUser(), user)
         deferred.resolve()
       }).error(function(data) {
         deferred.reject()
@@ -152,4 +152,4 @@ angular.module('techNodeApp').factory('server', function($cacheFactory, $q, $htt
       })
     }
   }
-})
+}])

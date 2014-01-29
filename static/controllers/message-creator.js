@@ -1,4 +1,4 @@
-angular.module('techNodeApp').controller('MessageCreatorCtrl', function($scope, server) {
+angular.module('techNodeApp').controller('MessageCreatorCtrl', ['$scope', 'server', function($scope, server) {
   $scope.createMessage = function() {
 
     server.createMessage({
@@ -10,4 +10,4 @@ angular.module('techNodeApp').controller('MessageCreatorCtrl', function($scope, 
     $scope.newMessage = ''
 
   }
-})
+}])
