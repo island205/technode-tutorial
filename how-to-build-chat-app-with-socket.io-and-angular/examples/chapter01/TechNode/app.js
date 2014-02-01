@@ -1,5 +1,5 @@
 var express = require('express')
-var app = express();
+var app = express()
 var port = process.env.PORT || 3000
 
 app.use(express.static(__dirname + '/static'))
@@ -23,4 +23,4 @@ io.sockets.on('connection', function (socket) {
   })
 })
 
-console.log("TechNode  is on port " + port + '!')
+console.log('TechNode  is on port ' + port + '!')
