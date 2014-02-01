@@ -152,22 +152,22 @@ exports.joinRoom = function(join, socket) {
       })
     } else {
       join.user = user
-      socket.join(join.user._roomId)
+      socket.join(user._roomId)
       socket.emit('technode', {
         action: 'joinRoom',
         data: join
       })
-      socket['in'](join.user._roomId).broadcast.emit('technode', {
+      socket['in'](user._roomId).broadcast.emit('technode', {
         action: 'createMessage',
         data: {
-          content: join.user.name + '进入了聊天室',
+          content: user.name + '进入了聊天室',
           creator: config.robot,
           createAt: new Date(),
-          _roomId: join.user._roomId,
+          _roomId: user._roomId,
           _id: ObjectId()
         }
       })
-      socket['in'](join.user._roomId).broadcast.emit('technode', {
+      socket['in'](user._roomId).broadcast.emit('technode', {
         action: 'joinRoom',
         data: join
       })

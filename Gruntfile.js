@@ -14,7 +14,6 @@ module.exports = function (grunt) {
       main: {
         files: [
           {expand: true, cwd: 'static/components/bootstrap/dist/fonts/', src: ['**'], dest: 'build/fonts'},
-          // {expand: true, cwd: 'static/pages/', src: ['**'], dest: 'build/pages'},
           {'build/index.html': 'static/index.html'},
           {'build/favicon.ico': 'static/favicon.ico'}
         ]
