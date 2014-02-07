@@ -54,11 +54,12 @@ angular.module('techNodeApp').factory('server', ['$cacheFactory', '$q', '$http',
   return {
     validate: function() {
       var deferred = $q.defer()
+      var self = this;
       $http({
         url: '/api/validate',
         method: 'GET'
       }).success(function(user) {
-        angular.extend(this.getUser(), user)
+        angular.extend(self.getUser(), user)
         deferred.resolve()
       }).error(function(data) {
         deferred.reject()
