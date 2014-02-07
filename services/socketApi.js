@@ -56,7 +56,7 @@ exports.disconnect = function(socket) {
             data: {
               user: user,
               room: {
-                _id: user._roomIds
+                _id: user._roomId
               }
             }
           })
