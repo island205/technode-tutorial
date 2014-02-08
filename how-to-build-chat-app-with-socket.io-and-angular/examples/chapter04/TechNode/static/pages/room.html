@@ -4,7 +4,7 @@
     <div class="panel-body room-content">
       <div class="list-group messages" auto-scroll-to-bottom>
         <div class="list-group-item message" ng-repeat="message in room.messages">
-          <img src="{{message.creator.avatarUrl}}" title="{{message.creator.name}}" class="img-rounded"/>{{message.creator.name}}: {{message.content}}<time am-time-ago="message.createAt"></time>
+          <img ng-src="{{message.creator.avatarUrl}}" title="{{message.creator.name}}" class="img-rounded"/>{{message.creator.name}}: {{message.content}}<time am-time-ago="message.createAt"></time>
         </div>
       </div>
       <form class="message-creator" ng-controller="MessageCreatorCtrl">
@@ -21,7 +21,7 @@
     <div class="panel-body user-list-content">
       <div class="list-group users">
         <div class="list-group-item user" ng-repeat="user in room.users">
-          <img src="{{user.avatarUrl}}" title="{{user.name}}" class="img-rounded"/>{{user.name}}
+          <img ng-src="{{user.avatarUrl}}" title="{{user.name}}" class="img-rounded"/>{{user.name}}
         </div>
       </div>
     </div>
