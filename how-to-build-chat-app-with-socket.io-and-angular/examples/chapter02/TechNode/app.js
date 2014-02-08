@@ -4,10 +4,12 @@ var app = express()
 var port = process.env.PORT || 3000
 var Controllers = require('./controllers')
 var parseSignedCookie = require('connect').utils.parseSignedCookie
-var MemoryStore = require('connect').session.MemoryStore
+var MongoStore = require('connect-mongo')(express)
 var Cookie = require('cookie')
 
-var sessionStore = new MemoryStore()
+var sessionStore = new MongoStore({
+  url: 'mongodb://localhost/technode'
+})
 
 app.use(express.bodyParser())
 app.use(express.cookieParser())
@@ -21,7 +23,7 @@ app.use(express.session({
 
 app.use(express.static(__dirname + '/static'))
 
-app.get('/ajax/validate', function(req, res) {
+app.get('/api/validate', function(req, res) {
   _userId = req.session._userId
   if (_userId) {
     Controllers.User.findUserById(_userId, function(err, user) {
@@ -38,7 +40,7 @@ app.get('/ajax/validate', function(req, res) {
   }
 })
 
-app.post('/ajax/login', function(req, res) {
+app.post('/api/login', function(req, res) {
   email = req.body.email
   if (email) {
     Controllers.User.findByEmailOrCreate(email, function(err, user) {
@@ -64,7 +66,7 @@ app.post('/ajax/login', function(req, res) {
   }
 })
 
-app.get('/ajax/logout', function(req, res) {
+app.get('/api/logout', function(req, res) {
   _userId = req.session._userId
   Controllers.User.offline(_userId, function(err, user) {
     if (err) {
