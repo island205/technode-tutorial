@@ -15,7 +15,7 @@
         <h3>{{room.name}}<span class="badge pull-right">{{room.users.length}}人</span></h3>
         <div class="avatar-list">
             <span ng-repeat="user in room.users" title="{{user.name}}">
-              <img alt="{{user.email}}" src="{{user.avatarUrl}}" class="img-rounded"/>
+              <img alt="{{user.email}}" ng-src="{{user.avatarUrl}}" class="img-rounded"/>
             </span>
         </div>
       </div>
