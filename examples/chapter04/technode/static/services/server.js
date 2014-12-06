@@ -60,7 +60,7 @@ angular.module('techNodeApp').factory('server', ['$cacheFactory', '$q', '$http',
       }).success(function(user) {
         angular.extend(this.getUser(), user)
         deferred.resolve()
-      }).error(function(data) {
+      }.bind(this)).error(function(data) {
         deferred.reject()
       })
       return deferred.promise

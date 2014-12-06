@@ -53,6 +53,6 @@ exports.validate = function(req, res) {
       }
     })
   } else {
-    res.json(401, null)
+    res.status(401).json(null)
   }
 }

@@ -1,7 +1,11 @@
 var express = require('express')
-var MongoStore = require('connect-mongo')(express)
-var parseSignedCookie = require('connect').utils.parseSignedCookie
-var Cookie = require('cookie')
+var bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser')
+var session = require('express-session')
+var app = express()
+var path = require('path')
+var signedCookieParser = cookieParser('technode')
+var MongoStore = require('connect-mongo')(session)
 
 var config = require('./config')
 var api = require('./services/api')
@@ -14,23 +18,26 @@ var sessionStore = new MongoStore({
 
 var app = express()
 
-app.use(express.bodyParser())
-app.use(express.cookieParser())
-app.use(express.session({
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+app.use(cookieParser())
+app.use(session({
   secret: 'technode',
+  resave: true,
+  saveUninitialized: false,
   cookie: {
     maxAge: 60 * 1000 * 60
   },
   store: sessionStore
 }))
 
-app.configure('development', function () {
+if ('development' == app.get('env')) {
   app.set('staticPath', '/static')
-})
-
-app.configure('production', function () {
+} else {
   app.set('staticPath', '/build')
-})
+}
 
 app.use(express.static(__dirname + app.get('staticPath')))
 
@@ -39,30 +46,35 @@ app.get('/api/logout', api.logout)
 app.get('/api/validate', api.validate)
 
 app.use(function(req, res) {
-  res.sendfile('.' + app.get('staticPath') + '/index.html')
+    res.sendFile(path.join(__dirname, app.get('staticPath') + '/index.html'))
 })
 
-var io = require('socket.io').listen(app.listen(port))
+var server = app.listen(port, function() {
+  console.log('TechNode  is on port ' + port + '!')
+})
 
-io.set('log level', 0)
+var io = require('socket.io').listen(server)
 
 io.set('authorization', function(handshakeData, accept) {
-  handshakeData.cookie = Cookie.parse(handshakeData.headers.cookie)
-  var connectSid = handshakeData.cookie['connect.sid']
-  connectSid = parseSignedCookie(connectSid, 'technode')
+  signedCookieParser(handshakeData, {}, function(err) {
+    if (err) {
+      accept(err, false)
+    } else {
+      sessionStore.get(handshakeData.signedCookies['connect.sid'], function(err, session) {
+        if (err) {
+          accept(err.message, false)
+        } else {
+          handshakeData.session = session
+          if (session._userId) {
+            accept(null, true)
+          } else {
+            accept('No login')
+          }
+        }
+      })
+    }
+  })
 
-  if (connectSid) {
-    sessionStore.get(connectSid, function(error, session) {
-      if (error) {
-        accept(error.message, false)
-      } else {
-        handshakeData.session = session
-        accept(null, true)
-      }
-    })
-  } else {
-    accept('No session')
-  }
 })
 
 io.sockets.on('connection', function(socket) {
@@ -77,5 +89,3 @@ io.sockets.on('connection', function(socket) {
     socketApi[request.action](request.data, socket, io)
   })
 })
-
-console.log("TechNode is on port " + port + '!')

@@ -26,7 +26,7 @@
     <div class="panel-body room-content">
       <div class="list-group messages" auto-scroll-to-bottom>
         <div class="list-group-item message" ng-repeat="message in room.messages">
-          <img src="{{message.creator.avatarUrl}}" title="{{message.creator.name}}" class="img-rounded"/>{{message.creator.name}}: {{message.content}}<time am-time-ago="message.createAt"></time>
+          <img ng-src="{{message.creator.avatarUrl}}" title="{{message.creator.name}}" class="img-rounded"/>{{message.creator.name}}: {{message.content}}<time am-time-ago="message.createAt"></time>
         </div>
       </div>
       <form class="message-creator" ng-controller="MessageCreatorCtrl">
@@ -43,7 +43,7 @@
     <div class="panel-body user-list-content">
       <div class="list-group users">
         <div class="list-group-item user" ng-repeat="user in room.users">
-          <img src="{{user.avatarUrl}}" title="{{user.name}}" class="img-rounded"/>{{user.name}}
+          <img ng-src="{{user.avatarUrl}}" title="{{user.name}}" class="img-rounded"/>{{user.name}}
         </div>
       </div>
     </div>
@@ -69,7 +69,7 @@
         <h3>{{room.name}}<span class="badge pull-right">{{room.users.length}}人</span></h3>
         <div class="avatar-list">
             <span ng-repeat="user in room.users" title="{{user.name}}">
-              <img alt="{{user.email}}" src="{{user.avatarUrl}}" class="img-rounded"/>
+              <img alt="{{user.email}}" ng-src="{{user.avatarUrl}}" class="img-rounded"/>
             </span>
         </div>
       </div>
@@ -100,7 +100,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right" ng-show="me._id">
             <li>
-              <img src="{{me.avatarUrl}}" title="{{me.name}}" class="img-rounded">
+              <img ng-src="{{me.avatarUrl}}" title="{{me.name}}" class="img-rounded">
             </li>
             <li>
               <a href="" ng-click="logout()">登出</a>
@@ -113,6 +113,6 @@
       <div class="row" ng-view="">
     </div>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script src="/script/7add9650.technode.js"></script>
+    <script src="/script/4a83d8a6.technode.js"></script>
   </div></body>
 </html>

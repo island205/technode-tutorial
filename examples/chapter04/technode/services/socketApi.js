@@ -3,7 +3,7 @@ var ObjectId = require('mongoose').Schema.ObjectId
 var config = require('../config')
 
 exports.connect = function(socket) {
-  var _userId = socket.handshake.session._userId
+  var _userId = socket.request.session._userId
   if (_userId) {
     Controllers.User.online(_userId, function(err, user) {
       if (err) {
@@ -42,7 +42,7 @@ exports.connect = function(socket) {
 }
 
 exports.disconnect = function(socket) {
-  var _userId = socket.handshake.session._userId
+  var _userId = socket.request.session._userId
   if (_userId) {
     Controllers.User.offline(_userId, function(err, user) {
       if (err) {
