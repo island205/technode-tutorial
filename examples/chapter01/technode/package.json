@@ -9,7 +9,7 @@
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "socket.io": "~0.9.16",
-    "express": "~3.4.8"
+    "express": "^4.10.4",
+    "socket.io": "^1.2.1"
   }
 }
