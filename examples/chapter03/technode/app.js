@@ -1,31 +1,39 @@
 var express = require('express')
 var async = require('async')
+var bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser')
+var session = require('express-session')
 var app = express()
+var path = require('path')
 var port = process.env.PORT || 3000
 var Controllers = require('./controllers')
-var parseSignedCookie = require('connect').utils.parseSignedCookie
-var MongoStore = require('connect-mongo')(express)
-var Cookie = require('cookie')
+var signedCookieParser = cookieParser('technode')
+var MongoStore = require('connect-mongo')(session)
 var ObjectId = require('mongoose').Schema.ObjectId
 
 var sessionStore = new MongoStore({
   url: 'mongodb://localhost/technodechapter02'
 })
 
-app.use(express.bodyParser())
-app.use(express.cookieParser())
-app.use(express.session({
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+app.use(cookieParser())
+app.use(session({
   secret: 'technode',
+  resave: true,
+  saveUninitialized: false,
   cookie: {
     maxAge: 60 * 1000 * 60
   },
   store: sessionStore
 }))
 
-app.use(express.static(__dirname + '/static'))
+app.use(express.static(path.join(__dirname, '/static')))
 
 app.get('/ajax/validate', function(req, res) {
-  _userId = req.session._userId
+  var _userId = req.session._userId
   if (_userId) {
     Controllers.User.findUserById(_userId, function(err, user) {
       if (err) {
@@ -37,7 +45,7 @@ app.get('/ajax/validate', function(req, res) {
       }
     })
   } else {
-    res.json(401, null)
+    res.status(401).json(null)
   }
 })
 
@@ -68,7 +76,7 @@ app.post('/ajax/login', function(req, res) {
 })
 
 app.get('/ajax/logout', function(req, res) {
-  _userId = req.session._userId
+  var _userId = req.session._userId
   Controllers.User.offline(_userId, function(err, user) {
     if (err) {
       res.json(500, {
@@ -82,32 +90,34 @@ app.get('/ajax/logout', function(req, res) {
 })
 
 app.use(function(req, res) {
-  res.sendfile('./static/index.html')
+  res.sendFile(path.join(__dirname, './static/index.html'))
 })
 
-var io = require('socket.io').listen(app.listen(port))
+var server = app.listen(port, function() {
+  console.log('TechNode  is on port ' + port + '!')
+})
+
+var io = require('socket.io').listen(server)
 
 io.set('authorization', function(handshakeData, accept) {
-  handshakeData.cookie = Cookie.parse(handshakeData.headers.cookie)
-  var connectSid = handshakeData.cookie['connect.sid']
-  connectSid = parseSignedCookie(connectSid, 'technode')
-
-  if (connectSid) {
-    sessionStore.get(connectSid, function(error, session) {
-      if (error) {
-        accept(error.message, false)
-      } else {
-        handshakeData.session = session
-        if (session._userId) {
-          accept(null, true)
+  signedCookieParser(handshakeData, {}, function(err) {
+    if (err) {
+      accept(err, false)
+    } else {
+      sessionStore.get(handshakeData.signedCookies['connect.sid'], function(err, session) {
+        if (err) {
+          accept(err.message, false)
         } else {
-          accept('No login')
+          handshakeData.session = session
+          if (session._userId) {
+            accept(null, true)
+          } else {
+            accept('No login')
+          }
         }
-      }
-    })
-  } else {
-    accept('No session')
-  }
+      })
+    }
+  })
 })
 
 var SYSTEM = {
@@ -116,7 +126,7 @@ var SYSTEM = {
 }
 
 io.sockets.on('connection', function(socket) {
-  var _userId = socket.handshake.session._userId
+  var _userId = socket.request.session._userId
   Controllers.User.online(_userId, function(err, user) {
     if (err) {
       socket.emit('err', {
@@ -151,7 +161,9 @@ io.sockets.on('connection', function(socket) {
             createAt: new Date(),
             _id: ObjectId()
           })
-          Controllers.User.leaveRoom({user: user}, function() {})
+          Controllers.User.leaveRoom({
+            user: user
+          }, function() {})
         }
 
       }
@@ -247,5 +259,3 @@ io.sockets.on('connection', function(socket) {
     })
   })
 })
-
-console.log("TechNode  is on port " + port + '!')

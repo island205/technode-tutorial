@@ -7,16 +7,17 @@ var app = express()
 var path = require('path')
 var port = process.env.PORT || 3000
 var Controllers = require('./controllers')
-var parseSignedCookie = require('connect').utils.parseSignedCookie
+var signedCookieParser = cookieParser('technode')
 var MongoStore = require('connect-mongo')(session)
-var Cookie = require('cookie')
 
 var sessionStore = new MongoStore({
   url: 'mongodb://localhost/technode'
 })
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
 app.use(cookieParser())
 app.use(session({
   secret: 'technode',
@@ -98,26 +99,24 @@ var server = app.listen(port, function() {
 var io = require('socket.io').listen(server)
 
 io.set('authorization', function(handshakeData, accept) {
-  handshakeData.cookie = Cookie.parse(handshakeData.headers.cookie)
-  var connectSid = handshakeData.cookie['connect.sid']
-  connectSid = parseSignedCookie(connectSid, 'technode')
-
-  if (connectSid) {
-    sessionStore.get(connectSid, function(error, session) {
-      if (error) {
-        accept(error.message, false)
-      } else {
-        handshakeData.session = session
-        if (session._userId) {
-          accept(null, true)
+  signedCookieParser(handshakeData, {}, function(err) {
+    if (err) {
+      accept(err, false)
+    } else {
+      sessionStore.get(handshakeData.signedCookies['connect.sid'], function(err, session) {
+        if (err) {
+          accept(err.message, false)
         } else {
-          accept('No login')
+          handshakeData.session = session
+          if (session._userId) {
+            accept(null, true)
+          } else {
+            accept('No login')
+          }
         }
-      }
-    })
-  } else {
-    accept('No session')
-  }
+      })
+    }
+  })
 })
 
 var SYSTEM = {
