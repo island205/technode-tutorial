@@ -49,7 +49,7 @@ app.get('/api/validate', function(req, res) {
 })
 
 app.post('/api/login', function(req, res) {
-  email = req.body.email
+  var email = req.body.email
   if (email) {
     Controllers.User.findByEmailOrCreate(email, function(err, user) {
       if (err) {

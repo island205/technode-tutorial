@@ -9,7 +9,7 @@ app.use(function(req, res) {
   res.sendFile(path.join(__dirname, './static/index.html'))
 })
 
-server = app.listen(port, function() {
+var server = app.listen(port, function() {
   console.log('TechNode  is on port ' + port + '!')
 })
 
