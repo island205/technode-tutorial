@@ -1,4 +1,4 @@
-technode-tutorial
-=================
+TechNode
+========
 
-Tutorial on building chat app with node.js, socket.io and angular.js.
+Tutorial on building  slack like app with Angular 2, Spring MVC 4 and SockJS.
